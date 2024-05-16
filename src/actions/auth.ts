@@ -59,8 +59,7 @@ export async function signUpWithPassword(
 
     return newUser && emailSent ? "success" : "error"
   } catch (error) {
-    console.error(error)
-    throw new Error("Error signing up with password")
+    throw new Error("Error signing up with password: "+ error)
   }
 }
 
