@@ -29,7 +29,7 @@ export const accountFormSchema = z.object({
         .max(15, 'Phone number must be at most 15 characters long')
         .regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im, 'Invalid phone number format'),
     institution: z
-      .string({ required_error: "Institution must be selected." })
+      .number({ required_error: "Institution id must be selected." })
   })
 
   export type AccountFormInput = z.infer<typeof accountFormSchema>

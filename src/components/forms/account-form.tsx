@@ -27,7 +27,10 @@ import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { AccountFormInput, accountFormSchema } from "@/validations/account"
 import { submitAccountForm } from "@/actions/account"
-import { getSession, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
+import { getUserByEmail } from "@/actions/user"
+import { Institution } from "@prisma/client"
+import { getInstitutions } from "@/actions/institutions"
 
 export function AccountForm(): JSX.Element {
     const { toast } = useToast()
@@ -35,29 +38,63 @@ export function AccountForm(): JSX.Element {
 
     const session = useSession();
 
+    const [userData, setUserData] = React.useState({
+        name: "",
+        surname: "",
+        email: "",
+        phone: "",
+        address: "",
+        institution: 0
+    });
+
+    const [institutions, setInstitutions] = React.useState<Institution[]>([]);
+
     const form = useForm<AccountFormInput>({
         resolver: zodResolver(accountFormSchema),
-        defaultValues: {
-            name: session.data?.user.name || "",
-            surname: "",
-            email: session.data?.user.email || "",
-            phone: "",
-            address: "",
-            institution: ""
-        }
+        defaultValues: userData
     })
 
     /**
      * This function is used to observe the change of session...
      */
     React.useEffect(() => {
-        if(session.data?.user) {
+        if (session.data?.user) {
             form.reset({
                 name: session.data.user.name || "",
                 email: session.data.user.email || ""
             })
         }
     }, [session.data, form])
+
+    React.useEffect(() => {
+        async function fetchUser() {
+            const user = await getUserByEmail({ email: String(session.data?.user.email) });
+            setUserData({
+                name: String(user?.name) || "",
+                surname: String(user?.surname) || "",
+                email: String(user?.email) || "",
+                phone: String(user?.phone) || "",
+                address: String(user?.address) || "",
+                institution: Number(user?.institutionId) || 0
+            })
+        }
+
+        fetchUser()
+    }, [session.data, form])
+
+    React.useEffect(() => {
+        form.reset(userData)
+    }, [userData, form])
+
+
+    React.useEffect(() => {
+        async function fetchInstitutions() {
+            const institutions = await getInstitutions();
+            setInstitutions(institutions)
+        }
+
+        fetchInstitutions();
+    }, [])
 
     function onSubmit(formData: AccountFormInput): void {
         startTransition(async () => {
@@ -88,7 +125,7 @@ export function AccountForm(): JSX.Element {
         })
     }
 
-    
+
 
     return (
         <Form {...form}>
@@ -103,7 +140,6 @@ export function AccountForm(): JSX.Element {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
-
                                 <FormControl className="h-12">
                                     <Input type="text" placeholder="John" {...field} />
                                 </FormControl>
@@ -135,7 +171,7 @@ export function AccountForm(): JSX.Element {
                             <FormItem >
                                 <FormLabel>Email</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="email" placeholder="john@smith.com" {...field} disabled/>
+                                    <Input type="email" placeholder="john@smith.com" {...field} disabled />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -180,17 +216,18 @@ export function AccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Institution</FormLabel>
                                 <FormControl className="h-12">
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a university" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="university_01">University 01</SelectItem>
-                                            <SelectItem value="university_02">University 02</SelectItem>
-                                            <SelectItem value="university_03">University 03</SelectItem>
-                                            <SelectItem value="university_04">University 04</SelectItem>
+                                            {institutions.length > 0 ?? institutions.map((institution: Institution) => (
+                                                <SelectItem key={institution.id} value={String(institution.id)}>
+                                                    {institution.name}
+                                                </SelectItem>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </FormControl>

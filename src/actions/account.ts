@@ -10,11 +10,26 @@ export async function submitAccountForm(
         const validatedInput = accountFormSchema.safeParse(rawInput)
         if (!validatedInput.success) return "error"
 
-        const { name, surname, email, phone, address, institution } = validatedInput.data;
+        const { name, surname, email, phone, address, institution } = validatedInput.data
 
-        
+        const updatedUser = await prisma.user.update({
+            where: {
+                email
+            },
+            data: {
+                name,
+                surname,
+                phone,
+                address,
+                institution: {
+                    connect: {
+                        id: 1
+                    }
+                }
+            }
+        })
 
-        return "success"
+        return updatedUser ? "success" : "error"
     } catch (error) {
         console.error(error)
         throw new Error("Error submitting account form")
