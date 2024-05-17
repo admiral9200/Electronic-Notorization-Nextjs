@@ -12,13 +12,14 @@ import { siteConfig } from "@/config/site"
 import { signInWithPasswordSchema } from "@/validations/auth"
 
 import { MagicLinkEmail } from "@/components/emails/magic-link-email"
+import credentials from "next-auth/providers/credentials"
 
 export default {
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_ID,
       clientSecret: env.GOOGLE_SECRET,
-      allowDangerousEmailAccountLinking: true,
+      allowDangerousEmailAccountLinking: true
     }),
     GitHubProvider({
       clientId: env.GITHUB_ID,
