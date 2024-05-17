@@ -35,6 +35,8 @@ export const contactFormSchema = z.object({
     }),
 })
 
+
+
 export const emailVerificationSchema = z.object({
   email: emailSchema,
 })
@@ -56,3 +58,5 @@ export type CheckIfEmailVerifiedInput = z.infer<
 >
 
 export type ContactFormInput = z.infer<typeof contactFormSchema>
+
+

@@ -6,6 +6,7 @@ import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 import auth from "@/lib/auth"
 import { Header } from "@/components/nav/header"
 import { Footer } from "@/components/nav/footer"
+import { SessionProvider } from "next-auth/react"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -19,9 +20,11 @@ export default async function DashboardLayout({
 
   return (
     <div>
-      <Header />
-        <main className="flex-1 min-h-screen">{children}</main>
-      <Footer />
+      <SessionProvider refetchInterval={0}>
+        <Header />
+          <main className="flex-1 min-h-screen">{children}</main>
+        <Footer />
+      </SessionProvider>
     </div>
   )
 }

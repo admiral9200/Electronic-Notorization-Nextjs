@@ -2,6 +2,7 @@ import { linkOAuthAccount } from "@/actions/auth"
 import { getUserById } from "@/actions/user"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
 
 import { env } from "@/env.mjs"
 import authConfig from "@/config/auth"
@@ -37,10 +38,12 @@ export const {
     },
     session({ session, token }) {
       session.user.role = token.role as "USER" | "ADMIN"
+
       return session
     },
     async signIn({ user, account }) {
       if (!user.id) return false
+
       if (account?.provider !== "credentials") return true
 
       const existingUser = await getUserById({ id: user.id })
