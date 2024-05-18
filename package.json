@@ -24,6 +24,7 @@
     "db:reset": "npx prisma migrate reset",
     "db:studio": "npx prisma studio",
     "db:format": "npx prisma format",
+    "db:seed": "npx prisma db seed",
     "shadcn:add": "pnpm dlx shadcn-ui@latest add",
     "packages:update-all": "pnpm update --latest",
     "prettier:format": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
@@ -31,6 +32,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "contentlayer build && next lint",
     "lint:fix": "contentlayer build && next lint --fix"
+  },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "dependencies": {
     "@auth/core": "^0.30.0",
@@ -70,6 +74,8 @@
     "@react-email/components": "^0.0.17",
     "@studio-freight/react-lenis": "^0.0.47",
     "@t3-oss/env-nextjs": "^0.7.1",
+    "@tabler/icons-react": "2.46.0",
+    "@tanstack/react-table": "8.11.8",
     "@vercel/analytics": "^1.2.2",
     "bcryptjs": "^2.4.3",
     "bufferutil": "^4.0.8",

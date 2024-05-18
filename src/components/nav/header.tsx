@@ -27,7 +27,7 @@ export async function Header(): Promise<JSX.Element> {
   const session = await auth()
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 w-full bg-transparent border-b border-black pb-1">
+    <header className="fixed top-0 z-40 flex h-20 w-full bg-red-50/70 backdrop-blur-sm shadow-lg">
       <div className="container flex items-center justify-between p-4">
         <Link
           href="/"

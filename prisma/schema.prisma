@@ -28,6 +28,9 @@ model Institution {
   id       Int             @id @default(autoincrement())
   name     String          @unique
   location String
+  email    String          @unique
+  wallet   String          @unique
+  logo     String
   genre    InstitutionType
   users    User[] // Define a one-to-many relationship with the User model...
   // account  Account[]
