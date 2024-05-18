@@ -12,7 +12,7 @@ const links = {
 }
 
 export const siteConfig = {
-  name: "SaaSy Land",
+  name: "12nets",
   description:
     "An open-source starter for Next.js 14 full-stack projects with advanced authentication and several database configurations. The aim of this project is to provide a solid foundation for faster building and launching SaaS products, marketing sites, blogs, and more.",
   links,
