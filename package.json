@@ -40,6 +40,7 @@
     "@auth/core": "^0.30.0",
     "@auth/prisma-adapter": "^2.1.0",
     "@aws-sdk/client-textract": "3.441.0",
+    "@blockcerts/cert-verifier-js": "^6.13.2",
     "@hookform/resolvers": "^3.3.4",
     "@neondatabase/serverless": "^0.9.3",
     "@prisma/adapter-neon": "^5.13.0",
