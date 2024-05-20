@@ -18,16 +18,18 @@ enum InstitutionType {
 }
 
 enum Role {
-  USER
   ADMIN
   STUDENT
-  TEACHER
+  INSTITUTION
 }
 
 model Institution {
   id       Int             @id @default(autoincrement())
   name     String          @unique
   location String
+  email    String          @unique
+  wallet   String          @unique
+  logo     String
   genre    InstitutionType
   users    User[] // Define a one-to-many relationship with the User model...
   // account  Account[]
@@ -83,7 +85,7 @@ model User {
   resetPasswordTokenExpiry DateTime?    @map("reset_password_token_expiery")
   image                    String?
   createdAt                DateTime     @default(now()) @map("created_at")
-  role                     Role         @default(USER)
+  role                     Role         @default(STUDENT)
   accounts                 Account[]
   sessions                 Session[]
   institution              Institution? @relation(fields: [institutionId], references: [id]) // Define a nullable reference to the Institution model...

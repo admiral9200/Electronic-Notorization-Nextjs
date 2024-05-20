@@ -20,6 +20,9 @@ export const env = createEnv({
     RESEND_HOST: z.string(),
     RESEND_USERNAME: z.string(),
     RESEND_PORT: z.string(),
+    AWS_REGION: z.string(),
+    AWS_ACCESS_KEY_ID: z.string(),
+    AWS_SECRET_ACCESS_KEY: z.string()
   },
 
   /**
@@ -50,5 +53,8 @@ export const env = createEnv({
     RESEND_HOST: process.env.RESEND_HOST,
     RESEND_USERNAME: process.env.RESEND_USERNAME,
     RESEND_PORT: process.env.RESEND_PORT,
+    AWS_REGION: process.env.AWS_REGION,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
   },
 })
