@@ -43,7 +43,7 @@ const userSchema = z.object({
   resetPasswordTokenExpiry: z.date().optional(),
   image: z.string().optional(),
   createdAt: z.date().default(new Date()),
-  role: z.nativeEnum(Role).default(Role.USER),
+  role: z.nativeEnum(Role).default(Role.STUDENT),
   accounts: z.array(accountSchema).optional(),
   sessions: z.array(sessionSchema).optional(),
 });

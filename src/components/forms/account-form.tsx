@@ -29,7 +29,7 @@ import { AccountFormInput, accountFormSchema } from "@/validations/account"
 import { submitAccountForm } from "@/actions/account"
 import { useSession } from "next-auth/react"
 import { getUserByEmail } from "@/actions/user"
-import { Institution } from "@prisma/client"
+import { Institution, Role } from "@prisma/client"
 import { getInstitutions } from "@/actions/institutions"
 
 export function AccountForm(): JSX.Element {
@@ -38,13 +38,14 @@ export function AccountForm(): JSX.Element {
 
     const session = useSession();
 
-    const [userData, setUserData] = React.useState({
+    const [userData, setUserData] = React.useState<AccountFormInput>({
         name: "",
         surname: "",
         email: "",
         phone: "",
         address: "",
-        institution: 0
+        institutionId: "0",
+        role: Role.STUDENT
     });
 
     const [institutions, setInstitutions] = React.useState<Institution[]>([]);
@@ -66,21 +67,22 @@ export function AccountForm(): JSX.Element {
         }
     }, [session.data, form])
 
-    React.useEffect(() => {
-        async function fetchUser() {
-            const user = await getUserByEmail({ email: String(session.data?.user.email) });
-            setUserData({
-                name: String(user?.name) || "",
-                surname: String(user?.surname) || "",
-                email: String(user?.email) || "",
-                phone: String(user?.phone) || "",
-                address: String(user?.address) || "",
-                institution: Number(user?.institutionId) || 0
-            })
-        }
+    // React.useEffect(() => {
+    //     async function fetchUser() {
+    //         const user = await getUserByEmail({ email: String(session.data?.user.email) });
+    //         setUserData({
+    //             name: String(user?.name) || "",
+    //             surname: String(user?.surname) || "",
+    //             email: String(user?.email) || "",
+    //             phone: String(user?.phone) || "",
+    //             address: String(user?.address) || "",
+    //             institutionId: String(user?.institutionId) || "0",
+    //             role: user?.role || Role.STUDENT
+    //         })
+    //     }
 
-        fetchUser()
-    }, [session.data, form])
+    //     fetchUser()
+    // }, [session.data, form])
 
     React.useEffect(() => {
         form.reset(userData)
@@ -89,7 +91,7 @@ export function AccountForm(): JSX.Element {
 
     React.useEffect(() => {
         async function fetchInstitutions() {
-            const institutions = await getInstitutions();
+            const institutions = await getInstitutions()
             setInstitutions(institutions)
         }
 
@@ -211,23 +213,48 @@ export function AccountForm(): JSX.Element {
 
                     <FormField
                         control={form.control}
-                        name="institution"
+                        name="institutionId"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Institution</FormLabel>
                                 <FormControl className="h-12">
-                                    <Select onValueChange={field.onChange} defaultValue={String(field.value)}>
+                                    <Select value={String(field.value)} onValueChange={field.onChange}>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a university" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {institutions.length > 0 ?? institutions.map((institution: Institution) => (
+                                            {institutions.map((institution: Institution) => (
                                                 <SelectItem key={institution.id} value={String(institution.id)}>
                                                     {institution.name}
                                                 </SelectItem>
                                             ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage className="pt-2 sm:text-sm" />
+                            </FormItem>
+                        )}
+                    />
+
+
+                    <FormField
+                        control={form.control}
+                        name="role"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Role</FormLabel>
+                                <FormControl className="h-12">
+                                    <Select value={String(field.value)} onValueChange={field.onChange}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your role" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value={Role.STUDENT}>{ Role.STUDENT }</SelectItem>
+                                            <SelectItem value={Role.INSTITUTION}>{ Role.INSTITUTION }</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </FormControl>

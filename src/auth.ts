@@ -37,7 +37,7 @@ export const {
       return token
     },
     session({ session, token }) {
-      session.user.role = token.role as "USER" | "ADMIN"
+      session.user.role = token.role as "STUDENT" | "ADMIN" | "INSTITUTION"
 
       return session
     },
