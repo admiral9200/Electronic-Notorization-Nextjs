@@ -1,5 +1,5 @@
 import { withContentlayer } from "next-contentlayer";
-import { verifyPatch } from "next-ws/server/index.js";
+// import { verifyPatch } from "next-ws/server/index.js";
 
 import("./src/env.mjs");
 
@@ -29,6 +29,6 @@ const nextConfig = {
   },
 };
 
-verifyPatch();
+// verifyPatch();
 
 export default withContentlayer(nextConfig);
