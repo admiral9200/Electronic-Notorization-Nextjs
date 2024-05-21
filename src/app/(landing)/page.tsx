@@ -14,9 +14,9 @@ export default function LandingPage(): JSX.Element {
       <HeroSection />
       <TechSection />
       <BenefitsSection />
-      <FeaturesSection />
+      {/* <FeaturesSection /> */}
       <NewsletterSection />
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
       <PricingSection />
       <FAQSection />
       <ContactSection />

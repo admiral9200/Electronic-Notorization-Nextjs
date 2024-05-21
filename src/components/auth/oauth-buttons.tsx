@@ -38,7 +38,7 @@ export function OAuthButtons(): JSX.Element {
   }
 
   return (
-    <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
+    <div className="grid">
       <Button
         aria-label="Sign in with Google"
         variant="outline"
@@ -49,7 +49,7 @@ export function OAuthButtons(): JSX.Element {
         Google
       </Button>
 
-      <Button
+      {/* <Button
         aria-label="Sign in with gitHub"
         variant="outline"
         onClick={() => void handleOAuthSignIn("github")}
@@ -57,7 +57,7 @@ export function OAuthButtons(): JSX.Element {
       >
         <Icons.gitHub className="mr-2 size-4" />
         GitHub
-      </Button>
+      </Button> */}
     </div>
   )
 }
