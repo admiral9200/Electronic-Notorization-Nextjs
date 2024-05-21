@@ -1,8 +1,10 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { pdfToImg } from "@/lib/pdf-to-img"
+import { useWebSocket } from "next-ws/client"
 import Link from "next/link"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 enum Status {
   IDLE,
@@ -17,6 +19,26 @@ export default function FeaturesPage(): JSX.Element {
   const [status, setStatus] = useState(Status.IDLE)
   const [pagesFinished, setPagesFinished] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+
+  // websocket...
+  const [message, setMessage] = useState<string | null>(null)
+  const ws = useWebSocket()
+
+  const onMessage = useCallback(
+    (event: MessageEvent<Blob>) =>
+      void event.data.text().then(setMessage),
+    []
+  )
+
+  useEffect(() => {
+    ws?.addEventListener('message', onMessage)
+    return () => ws?.removeEventListener('message', onMessage)
+  }, [onMessage, ws])
+
+  const handleSubmit = async () => {
+    console.log("clicked")
+    ws?.send("first message")
+  }
 
 
   const handleExtractPDF = async (file: File) => {
@@ -44,7 +66,6 @@ export default function FeaturesPage(): JSX.Element {
     }
   }
 
-
   const runOCR = async (imageUrl: string) => {
     try {
       const response = await fetch("/api/textract", {
@@ -63,8 +84,6 @@ export default function FeaturesPage(): JSX.Element {
       console.log("error", error)
     }
   }
-
-
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -86,6 +105,8 @@ export default function FeaturesPage(): JSX.Element {
       }, 1000)
     }
   }
+
+ 
 
   return (
     <div className="flex min-h-screen flex-col w-full items-center justify-center">
@@ -132,6 +153,19 @@ export default function FeaturesPage(): JSX.Element {
             <p className="mt-4">{page}</p>
           </div>
         ))}
+
+
+      {/* Submitting to institution... */}
+      <div className="mt-8">
+        <Button onClick={handleSubmit}>Submit my transcript</Button>
+      </div>
+
+
+      <p>
+        {message === null
+          ? 'Waiting to receive message...'
+          : `Got message: ${message}`}
+      </p>
     </div>
   )
 }

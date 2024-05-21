@@ -5,11 +5,11 @@ import { emailSchema } from "@/validations/email"
 
 export const userSchema = z.object({
   role: z
-    .enum(["USER", "ADMIN"], {
+    .enum(["STUDENT", "ADMIN", "INSTITUTION"], {
       required_error: "Role is required",
       invalid_type_error: "Role must be one of the following: user, admin",
     })
-    .default("USER"),
+    .default("STUDENT"),
   email: emailSchema,
   password: passwordSchema,
 })
