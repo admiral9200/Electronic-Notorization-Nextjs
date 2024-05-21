@@ -8,14 +8,12 @@
     "type": "git",
     "url": ""
   },
-  "bugs": {
-    "url": ""
-  },
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "ws:patch": "npx next-ws-cli@latest patch",
     "postinstall": "pnpm prisma generate",
     "db:generate": "pnpm prisma generate",
     "db:migrate": "pnpm prisma migrate dev",
