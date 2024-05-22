@@ -7,7 +7,7 @@ export async function submitTranscriptForm(
     rawInput: TranscriptFormInput
 ): Promise<"error" | "success"> {
     try {
-        const validatedInput = transcriptFormSchema.safeParse(rawInput)
+        const validatedInput = await transcriptFormSchema.safeParse(rawInput)
         if (!validatedInput.success) return "error"
 
        console.log("submitted data: ", validatedInput.data)

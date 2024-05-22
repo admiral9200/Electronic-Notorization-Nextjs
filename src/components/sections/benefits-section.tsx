@@ -163,7 +163,7 @@ export function BenefitsSection(): JSX.Element {
               <CardContent className="space-y-6 p-0">
                 <p className="px-4 text-base leading-8 tracking-wide text-muted-foreground">
                   <Balancer>
-                  Enjoy the freedom to adapt our platform to your specific needs, whether it's integrating with your student information system, configuring custom issuance workflows, or designing a branded user experience. Our highly configurable Blockcerts solution provides the agility to evolve alongside your institution's changing requirements, ensuring your credential management ecosystem remains future-proof and aligned with your strategic goals.
+                  Enjoy the freedom to adapt our platform to your specific needs, whether it is integrating with your student information system, configuring custom issuance workflows, or designing a branded user experience. Our highly configurable Blockcerts solution provides the agility to evolve alongside your institution changing requirements, ensuring your credential management ecosystem remains future-proof and aligned with your strategic goals.
                   </Balancer>
                 </p>
                 <Image
