@@ -3,7 +3,6 @@
 import { Layout, LayoutBody, LayoutHeader } from '@/components/custom/layout'
 import { DataTable } from './components/data-table'
 import { columns } from './components/columns'
-import { tasks } from './data/tasks'
 import { useEffect, useState } from 'react'
 import { Institution } from '@prisma/client'
 

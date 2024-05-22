@@ -3,8 +3,22 @@
 import { Button } from "@/components/ui/button"
 import { pdfToImg } from "@/lib/pdf-to-img"
 import { useWebSocket } from "next-ws/client"
-import Link from "next/link"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { useCallback, useEffect, useState } from "react"
+import { toast } from "@/hooks/use-toast"
+import { useNavigate } from "react-router-dom"
+import { useRouter } from "next/navigation"
+import { TranscriptSubmitForm } from "@/components/forms/transcript-submit-form"
 
 enum Status {
   IDLE,
@@ -19,6 +33,9 @@ export default function FeaturesPage(): JSX.Element {
   const [status, setStatus] = useState(Status.IDLE)
   const [pagesFinished, setPagesFinished] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+
+  // routing...
+  const router = useRouter()
 
   // websocket...
   const [message, setMessage] = useState<string | null>(null)
@@ -35,9 +52,18 @@ export default function FeaturesPage(): JSX.Element {
     return () => ws?.removeEventListener('message', onMessage)
   }, [onMessage, ws])
 
+  /**
+   * Submit the transcript and display a notification and move to the ordering dashboard...
+   */
   const handleSubmit = async () => {
-    console.log("clicked")
     ws?.send("first message")
+
+    toast({
+      title: "Successfully Submitted!",
+      description: "Your transcript is being processed from now!"
+    })
+
+    router.push("/student/dashboard")
   }
 
 
@@ -106,11 +132,11 @@ export default function FeaturesPage(): JSX.Element {
     }
   }
 
- 
+
 
   return (
     <div className="flex min-h-screen flex-col w-full items-center justify-center">
-      <h4 className="text-2xl font-semibold">
+      {/* <h4 className="text-2xl font-semibold">
         Extract text from PDFs using Next.js app dir
       </h4>
 
@@ -152,20 +178,33 @@ export default function FeaturesPage(): JSX.Element {
             <p className="text-lg font-medium mt-4">Page {index + 1}</p>
             <p className="mt-4">{page}</p>
           </div>
-        ))}
+        ))} */}
 
 
       {/* Submitting to institution... */}
-      <div className="mt-8">
-        <Button onClick={handleSubmit}>Submit my transcript</Button>
-      </div>
+      {/* <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="outline">Submit my transcript</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. You cannot cancel your application once submit.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>
+              <Button onClick={handleSubmit}>
+                Continue
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog> */}
 
-
-      <p>
-        {message === null
-          ? 'Waiting to receive message...'
-          : `Got message: ${message}`}
-      </p>
+      <TranscriptSubmitForm />
     </div>
   )
 }

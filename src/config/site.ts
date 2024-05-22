@@ -47,6 +47,16 @@ export const siteConfig = {
       href: "/blog",
     },
   ] satisfies NavItem[],
+  protectedNavItems: [
+    {
+      title: "Student",
+      href: "/student/order",
+    },
+    {
+      title: "Institution",
+      href: "/features",
+    },
+  ] satisfies NavItem[],
   navItemsMobile: [],
   navItemsFooter: [
     {
