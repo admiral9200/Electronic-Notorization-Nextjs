@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Layout, LayoutBody } from '@/components/custom/layout'
-import { RecentSales } from './components/recent-sales'
 import { Overview } from './components/overview'
 import { WebSocketProvider } from 'next-ws/client'
+import { RecentOrders } from './components/recent-orders'
 
 export default function Dashboard() {
   return (
@@ -38,9 +38,7 @@ export default function Dashboard() {
             <div className='w-full pb-2'>
               <TabsList>
                 <TabsTrigger value='overview'>Overview</TabsTrigger>
-                <TabsTrigger value='analytics'>Analytics</TabsTrigger>
-                <TabsTrigger value='reports'>Reports</TabsTrigger>
-                <TabsTrigger value='notifications'>Notifications</TabsTrigger>
+                <TabsTrigger value='students'>Students</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value='overview' className='space-y-4'>
@@ -48,23 +46,11 @@ export default function Dashboard() {
                 <Card>
                   <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                     <CardTitle className='text-sm font-medium'>
-                      Total Revenue
+                      Total Number of Students
                     </CardTitle>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      className='h-4 w-4 text-muted-foreground'
-                    >
-                      <path d='M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' />
-                    </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>$45,231.89</div>
+                    <div className='text-2xl font-bold'>4300</div>
                     <p className='text-xs text-muted-foreground'>
                       +20.1% from last month
                     </p>
@@ -73,7 +59,7 @@ export default function Dashboard() {
                 <Card>
                   <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                     <CardTitle className='text-sm font-medium'>
-                      Subscriptions
+                      Ordering Status
                     </CardTitle>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -91,9 +77,9 @@ export default function Dashboard() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className='text-2xl font-bold'>+2350</div>
+                    <div className='text-2xl font-bold'>123</div>
                     <p className='text-xs text-muted-foreground'>
-                      +180.1% from last month
+                      +10.1% from last month
                     </p>
                   </CardContent>
                 </Card>
@@ -158,13 +144,13 @@ export default function Dashboard() {
                 </Card>
                 <Card className='col-span-1 lg:col-span-3'>
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Recent Orders</CardTitle>
                     <CardDescription>
-                      You made 265 sales this month.
+                      List of students who required order within past 24 hours.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <RecentSales />
+                    <RecentOrders />
                   </CardContent>
                 </Card>
               </div>

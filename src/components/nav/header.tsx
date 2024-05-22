@@ -34,15 +34,25 @@ export async function Header(): Promise<JSX.Element> {
           className="flex items-center justify-center gap-2 text-lg font-bold tracking-wide transition-all duration-300 ease-in-out"
         >
           {/* <Icons.rocket className="size-6 md:hidden lg:flex" /> */}
-          <Image 
+          <Image
             src={"/images/logo/12nets.webp"}
             width={120}
             height={120}
             alt=""
           />
-          {/* <span className="hidden md:flex">{siteConfig.name}</span> */}
         </Link>
+
+        {/* Protected nav items that can be visible after signing in. */}
+        {session?.user ? (
+          <Navigation navItems={siteConfig.protectedNavItems} />
+        ) : (
+          <></>
+        )}
+
+        {/* Normal nav items that is visible publicly. */}
         <Navigation navItems={siteConfig.navItems} />
+
+
         <div className="flex items-center justify-center">
           <ThemeToggle />
           <NavigationMobile navItems={siteConfig.navItems} />
@@ -85,7 +95,7 @@ export async function Header(): Promise<JSX.Element> {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link 
+                      <Link
                         href="/dashboard/account"
                         aria-label="Account page"
                       >
@@ -114,12 +124,12 @@ export async function Header(): Promise<JSX.Element> {
               </DropdownMenu>
             ) : (
               <Link
-                aria-label="Get started"
+                aria-label="Sign up"
                 href="/signup"
                 className={cn(buttonVariants({ size: "sm" }), "ml-2")}
               >
-                Get Started
-                <span className="sr-only">Get Started</span>
+                Sign up
+                <span className="sr-only">Sign up</span>
               </Link>
             )}
           </nav>

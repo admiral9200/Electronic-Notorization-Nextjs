@@ -67,22 +67,22 @@ export function AccountForm(): JSX.Element {
         }
     }, [session.data, form])
 
-    // React.useEffect(() => {
-    //     async function fetchUser() {
-    //         const user = await getUserByEmail({ email: String(session.data?.user.email) });
-    //         setUserData({
-    //             name: String(user?.name) || "",
-    //             surname: String(user?.surname) || "",
-    //             email: String(user?.email) || "",
-    //             phone: String(user?.phone) || "",
-    //             address: String(user?.address) || "",
-    //             institutionId: String(user?.institutionId) || "0",
-    //             role: user?.role || Role.STUDENT
-    //         })
-    //     }
+    React.useEffect(() => {
+        async function fetchUser() {
+            const user = await getUserByEmail({ email: String(session.data?.user.email) });
+            setUserData({
+                name: String(user?.name) || "",
+                surname: String(user?.surname) || "",
+                email: String(user?.email) || "",
+                phone: String(user?.phone) || "",
+                address: String(user?.address) || "",
+                institutionId: String(user?.institutionId) || "0",
+                role: user?.role || Role.STUDENT
+            })
+        }
 
-    //     fetchUser()
-    // }, [session.data, form])
+        fetchUser()
+    }, [session.data, form])
 
     React.useEffect(() => {
         form.reset(userData)
