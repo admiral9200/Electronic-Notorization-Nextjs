@@ -186,7 +186,7 @@ export function TranscriptSubmitForm(): JSX.Element {
                                         />
 
 
-                                        <FormField
+                                        {/* <FormField
                                             control={form.control}
                                             name="transcript"
                                             render={({ field }) => (
@@ -198,7 +198,7 @@ export function TranscriptSubmitForm(): JSX.Element {
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
                                             )}
-                                        />
+                                        /> */}
                                     </form>
                                 </Form>
                             </CardContent>
