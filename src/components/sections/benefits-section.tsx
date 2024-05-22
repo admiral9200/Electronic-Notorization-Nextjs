@@ -152,7 +152,7 @@ export function BenefitsSection(): JSX.Element {
             >
               <CardHeader>
                 <CardDescription className="py-2 text-base font-medium tracking-wide text-muted-foreground">
-                  Flexibility and Support
+                  Flexibility and Support 
                 </CardDescription>
                 <CardTitle className="font-urbanist text-3xl font-black tracking-wide">
                   <Balancer>
