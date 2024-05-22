@@ -10,7 +10,17 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { useForm } from "react-hook-form"
@@ -18,11 +28,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { TranscriptFormInput, transcriptFormSchema } from "@/validations/transcript"
 import { submitTranscriptForm } from "@/actions/transcript"
 import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 
 
 export function TranscriptSubmitForm(): JSX.Element {
     const { toast } = useToast()
     const [isPending, startTransition] = React.useTransition()
+
+    const router = useRouter()
 
     const [transcriptData, setTranscriptData] = React.useState<TranscriptFormInput>({
         userId: 0,
@@ -70,8 +83,21 @@ export function TranscriptSubmitForm(): JSX.Element {
         })
     }
 
+    /**
+   * Submit the transcript and display a notification and move to the ordering dashboard...
+   */
+    const handleSubmit = async () => {
+        toast({
+            title: "Successfully Submitted!",
+            description: "Your transcript is being processed from now!"
+        })
+
+        router.push("/student/dashboard")
+    }
+
     return (
         <div className="flex min-h-screen w-full flex-col">
+
             <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="mx-auto grid w-full max-w-6xl gap-2">
                     <h1 className="text-3xl font-semibold">Settings</h1>
@@ -99,61 +125,75 @@ export function TranscriptSubmitForm(): JSX.Element {
                             </CardHeader>
                             <CardContent>
                                 <Form {...form}>
-                                    <form 
+                                    <form
                                         className="flex flex-col gap-4"
                                         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
                                     >
-                                        <FormField 
+                                        <FormField
                                             control={form.control}
                                             name="userId"
-                                            render={({field}) => (
+                                            render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>UserId</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="number" placeholder="10" { ...field } />
+                                                        <Input type="number" placeholder="10" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
                                             )}
                                         />
 
-                                        <FormField 
+                                        <FormField
                                             control={form.control}
                                             name="name"
-                                            render={({field}) => (
+                                            render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>Name</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" { ...field } />
+                                                        <Input type="text" placeholder="John Smith" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
                                             )}
                                         />
 
-                                        <FormField 
+                                        <FormField
                                             control={form.control}
                                             name="institutionId"
-                                            render={({field}) => (
+                                            render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>My School</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" { ...field } />
+                                                        <Input type="text" placeholder="John Smith" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
                                             )}
                                         />
 
-                                        
-                                        <FormField 
+                                        <FormField
+                                            control={form.control}
+                                            name="aimedInstitutionId"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Recipient University</FormLabel>
+                                                    <FormControl className="h-12">
+                                                        <Input type="text" placeholder="John Smith" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage className="pt-2 sm:text-sm" />
+                                                </FormItem>
+                                            )}
+                                        />
+
+
+                                        <FormField
                                             control={form.control}
                                             name="transcript"
-                                            render={({field}) => (
+                                            render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>Transcript</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="file" { ...field } />
+                                                        <Input type="file" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
@@ -163,7 +203,27 @@ export function TranscriptSubmitForm(): JSX.Element {
                                 </Form>
                             </CardContent>
                             <CardFooter className="border-t px-6 py-4">
-                                <Button>Save</Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="outline">Submit my transcript</Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. You cannot cancel your application once submit.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction>
+                                                <Button onClick={handleSubmit}>
+                                                    Continue
+                                                </Button>
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </CardFooter>
                         </Card>
                     </div>

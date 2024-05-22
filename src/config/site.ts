@@ -54,7 +54,7 @@ export const siteConfig = {
     },
     {
       title: "Institution",
-      href: "/features",
+      href: "/institution/dashboard",
     },
   ] satisfies NavItem[],
   navItemsMobile: [],

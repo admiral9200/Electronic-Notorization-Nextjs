@@ -45,7 +45,7 @@ export async function Header(): Promise<JSX.Element> {
         {/* Protected nav items that can be visible after signing in. */}
         {session?.user ? (
           <Navigation navItems={siteConfig.protectedNavItems} />
-        ): (
+        ) : (
           <></>
         )}
 
