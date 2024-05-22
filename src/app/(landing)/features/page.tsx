@@ -44,8 +44,7 @@ export default function FeaturesPage(): JSX.Element {
     }
   }
 
-
-  const runOCR = async (imageUrl: string) => {
+  const runOCR = async (imageUrl: string): Promise<any> => {
     try {
       const response = await fetch("/api/textract", {
         method: "POST",
@@ -63,8 +62,6 @@ export default function FeaturesPage(): JSX.Element {
       console.log("error", error)
     }
   }
-
-
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
