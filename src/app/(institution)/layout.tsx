@@ -11,7 +11,7 @@ export default function LandingLayout({
   children,
 }: LandingLayoutProps): JSX.Element {
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden min-h-screen pt-20">
       <Header />
         <main className="flex-1">{children}</main>
       <Footer />
