@@ -74,7 +74,7 @@ export default function Page() {
 
     const handleGenerateCertificate = async () => {
         try {
-            const response = await fetch('/api/blockcerts', {
+            const response = await fetch('/api/blockcerts/create-certificate', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ recipientData, transcriptData, issuerData })
