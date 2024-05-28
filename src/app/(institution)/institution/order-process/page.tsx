@@ -5,13 +5,15 @@ import { useWebSocket } from "next-ws/client"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { extractKeyInfo } from "@/lib/process-with-gpt"
 
 enum Status {
     IDLE,
     UPLOADING,
     ANALYZING,
     SUCCESS,
-    ERROR
+    ERROR,
+    PROCESSING
 }
 
 
@@ -98,6 +100,10 @@ export default function Page(): JSX.Element {
                 (item: string, index: number) => `Page ${index + 1}:\n${item}\n\n`
             )
 
+            const data = await extractKeyInfo("")
+
+            console.log("data: ", data)
+
             setTimeout(() => {
                 setStatus(Status.SUCCESS)
                 setPdfContent(formattedPdfContent!)
@@ -108,7 +114,7 @@ export default function Page(): JSX.Element {
     return (
         <div className="flex min-h-screen flex-col w-full items-center justify-center">
             <h4 className="text-2xl font-semibold">
-                Extract text from PDFs using Next.js app dir
+                Please upload your Transcript
             </h4>
             {
                 {
@@ -129,6 +135,7 @@ export default function Page(): JSX.Element {
                     ),
                     [Status.SUCCESS]: <p>PDF successfully analyzed</p>,
                     [Status.ERROR]: <p>Error analyzing PDF.</p>,
+                    [Status.PROCESSING]: <p>Processing the extracted data</p>
                 }[status]
             }
 
