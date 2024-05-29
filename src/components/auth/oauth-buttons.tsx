@@ -3,7 +3,7 @@
 import * as React from "react"
 import { signIn } from "next-auth/react"
 
-import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
+import { DEFAULT_AUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -18,7 +18,7 @@ export function OAuthButtons(): JSX.Element {
   ): Promise<void> {
     try {
       await signIn(provider, {
-        callbackUrl: DEFAULT_SIGNIN_REDIRECT,
+        callbackUrl: DEFAULT_AUTHENTICATED_REDIRECT,
       })
 
       toast({
