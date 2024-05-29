@@ -3,6 +3,7 @@
 import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import Image from 'next/image'
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -37,8 +38,25 @@ export function InstitueAccountForm(): JSX.Element {
         resolver: zodResolver(accountFormSchema),
     })
 
+    const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
+
+    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <Form {...form}>
+            <div className='pb-16'>
+                <h2 className='text-3xl font-bold'>Account:</h2>
+                <img className="w-36 h-36 rounded-full mx-auto border border-white" src="/images/avatars/pjborowiecki.jpeg" alt="" />
+            </div>
             <form
                 className="grid w-full gap-8"
             >
@@ -93,7 +111,7 @@ export function InstitueAccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Wallet</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="text" placeholder="Enter wallet address"/>
+                                    <Input type="text" placeholder="Enter wallet address" />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -102,18 +120,44 @@ export function InstitueAccountForm(): JSX.Element {
                 </div>
 
                 <div className="grid w-full gap-8 md:grid-cols-2 md:gap-4">
+                <FormField
+                        control={form.control}
+                        name="logo"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Logo</FormLabel>
+                                <FormControl className="h-12">
+                                    <Input type="file" onChange={handleLogoChange} />
+                                </FormControl>
+                                {logoPreview && (
+                                    <img src={logoPreview} className="mt-2 w-24 h-24 rounded" alt="Logo Preview" />
+                                )}
+                                <FormMessage className="pt-2 sm:text-sm" />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={form.control}
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Logo</FormLabel>
-
-                                <FormControl className="h-12">
-                                    <Input type="file" />
-                                </FormControl>
-                                <FormMessage className="pt-2 sm:text-sm" />
-                            </FormItem>
+                            <FormLabel>Genre</FormLabel>
+                            <FormControl className="h-12">
+                                <Select>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="genre" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="School"> School </SelectItem>
+                                        <SelectItem value="University"> University </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage className="pt-2 sm:text-sm" />
+                        </FormItem>
                         )}
                     />
 
