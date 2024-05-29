@@ -52,7 +52,6 @@ export function InstitueAccountForm(): JSX.Element {
     };
 
     const handleUploadButtonClick = () => {
-        // Trigger the file input when the upload button is clicked
         const fileInput = document.getElementById("logoInput");
         if (fileInput) {
             fileInput.click();
