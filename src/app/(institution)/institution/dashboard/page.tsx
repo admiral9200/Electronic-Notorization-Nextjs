@@ -13,6 +13,7 @@ import { Layout, LayoutBody } from '@/components/custom/layout'
 import { Overview } from './components/overview'
 import { WebSocketProvider } from 'next-ws/client'
 import { RecentOrders } from './components/recent-orders'
+import StudentsList from './components/students-list'
 
 export default function Dashboard() {
   return (
@@ -154,6 +155,9 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+            <TabsContent value='students' className='space-y-4'>
+               <StudentsList />
             </TabsContent>
           </Tabs>
         </LayoutBody>
