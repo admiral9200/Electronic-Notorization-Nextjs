@@ -63,7 +63,7 @@ export function InstitueAccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Location</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="string" placeholder="Smith" {...field} />
+                                    <Input type="string" placeholder="Enter location" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -93,7 +93,7 @@ export function InstitueAccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Wallet</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="text"/>
+                                    <Input type="text" placeholder="Enter wallet address"/>
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -117,50 +117,6 @@ export function InstitueAccountForm(): JSX.Element {
                         )}
                     />
 
-                    <FormField
-                        control={form.control}
-                        name="institutionId"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Institution</FormLabel>
-                                <FormControl className="h-12">
-                                    <Select value={String(field.value)} onValueChange={field.onChange}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a university" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage className="pt-2 sm:text-sm" />
-                            </FormItem>
-                        )}
-                    />
-
-
-                    <FormField
-                        control={form.control}
-                        name="role"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Role</FormLabel>
-                                <FormControl className="h-12">
-                                    <Select value={String(field.value)} onValueChange={field.onChange}>
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select your role" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectItem value={Role.STUDENT}>{ Role.STUDENT }</SelectItem>
-                                            <SelectItem value={Role.INSTITUTION}>{ Role.INSTITUTION }</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage className="pt-2 sm:text-sm" />
-                            </FormItem>
-                        )}
-                    />
                 </div>
 
                 <Button
