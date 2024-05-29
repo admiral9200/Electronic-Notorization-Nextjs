@@ -47,3 +47,23 @@ export async function getGitHubStars(): Promise<number | null> {
     return null
   }
 }
+
+export async function handleDownloadJsonFile(data: any, filename: string): Promise<Boolean> {
+  try {
+    const jsonData = JSON.stringify(data.certificate, null, 2)
+    const blob = new Blob([jsonData], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.download = `${filename}.json`
+    link.href = url
+    link.click()
+
+    URL.revokeObjectURL(url)
+
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}
