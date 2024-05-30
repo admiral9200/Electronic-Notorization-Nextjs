@@ -67,3 +67,31 @@ export async function handleDownloadJsonFile(data: any, filename: string): Promi
     return false
   }
 }
+
+
+export async function getBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
+export function formatBytes(
+  bytes: number,
+  opts: {
+    decimals?: number
+    sizeType?: "accurate" | "normal"
+  } = {}
+) {
+  const { decimals = 0, sizeType = "normal" } = opts
+
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"]
+  const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"]
+  if (bytes === 0) return "0 Byte"
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
+    }`
+}

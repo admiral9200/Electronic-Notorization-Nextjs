@@ -1,9 +1,7 @@
 "use client"
 
 import { pdfToImg } from "@/lib/pdf-to-img"
-import { useWebSocket } from "next-ws/client"
-import { useCallback, useEffect, useState } from "react"
-import { toast } from "@/hooks/use-toast"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { extractKeyInfo } from "@/lib/process-with-gpt"
 import { handleDownloadJsonFile } from "@/lib/utils"
@@ -28,25 +26,6 @@ export default function Page(): JSX.Element {
     const [issuerData, setIssuerData] = useState("https://raw.githubusercontent.com/blockchain-certificates/cert-issuer/master/examples/issuer/profile.json")
     const [transcriptData, setTranscriptData] = useState<any>(null)
     const [certificate, setCertificate] = useState(null)
-
-    // routing...
-    const router = useRouter()
-    const ws = useWebSocket()
-
-    /**
-     * Submit the transcript and display a notification and move to the ordering dashboard...
-     */
-    const handleSubmit = async () => {
-        ws?.send("first message")
-
-        toast({
-            title: "Successfully Submitted!",
-            description: "Your transcript is being processed from now!"
-        })
-
-        router.push("/student/dashboard")
-    }
-
 
     const handleExtractPDF = async (file: File) => {
         if (!file) return
