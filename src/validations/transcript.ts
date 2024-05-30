@@ -19,7 +19,7 @@ export const transcriptFormSchema = z.object({
         .string({ required_error: "Recipient university id must be selected." }),
     transcript: z
         .instanceof(File)
-        .refine((file) => file.size !== 0, "Please upload an image"),
+        .refine((file) => file.size !== 0, "Please upload a pdf transcript file"),
 })
 
 export type TranscriptFormInput = z.infer<typeof transcriptFormSchema>
