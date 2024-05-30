@@ -16,6 +16,7 @@ import { RecentOrders } from './components/recent-orders'
 import StudentsList from './components/students-list'
 import TranscriptStatus from './components/transcript-status'
 import OtherInstitutions from './components/other-institutions'
+import NotificationsFromStudents from './components/notifications-from-students'
 
 export default function Dashboard() {
   return (
@@ -158,12 +159,16 @@ export default function Dashboard() {
                 </Card>
               </div>
               <div>
-                <h2 className='text-2xl text-white py-5 font-bold'>Transcript Status:</h2>
+                <h2 className='text-2xl text-white py-8 font-bold'>Transcript Status:</h2>
                 <TranscriptStatus />
               </div> 
               <div>
-                <h2 className='text-2xl text-white py-5 font-bold'>Other Institutions:</h2>
+                <h2 className='text-2xl text-white py-8 font-bold'>Other Institutions:</h2>
                 <OtherInstitutions />
+              </div> 
+              <div>
+                <h2 className='text-2xl text-white py-8 font-bold'>Notifications From Students:</h2>
+                <NotificationsFromStudents />
               </div> 
             </TabsContent>
             <TabsContent value='students' className='space-y-4'>
