@@ -71,8 +71,8 @@ function TranscriptStatus() {
         // </div>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
         {cardData.map((data, index) => (
-            <Card key={index} className='bg-transparent border border-gray-500'>
-                <CardHeader>
+            <Card key={index} className='bg-transparent rounded-md border border-gray-500'>
+                <CardHeader className='bg-gray-700 rounded-t-md py-4'>
                     <CardTitle className=' font-bold'>{data.name}</CardTitle>
                 </CardHeader>
                 <div className='border-b border-gray-500'></div>
@@ -90,8 +90,8 @@ function TranscriptStatus() {
                         <h3 className='text-gray-400 text-sm font-semibold'>{data.recipientUniversity}</h3>
                     </div>
                 </CardContent>
-                <CardFooter className='pt-3 flex space-x-2'>
-                    <h3 className='font-bold '>Status:</h3>
+                <CardFooter className='py-2.5 flex space-x-2'>
+                    <h3 className='font-bold'>Status:</h3>
                     <h3 className='text-gray-400 text-sm font-semibold'>{data.status}</h3>
                 </CardFooter>
             </Card>

@@ -158,16 +158,16 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
-              <div>
-                <h2 className='text-2xl text-white py-8 font-bold'>Transcript Status:</h2>
+              <div className='py-6 pt-12'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Transcript Status:</h2>
                 <TranscriptStatus />
               </div> 
-              <div>
-                <h2 className='text-2xl text-white py-8 font-bold'>Other Institutions:</h2>
+              <div className='py-6'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Other Institutions:</h2>
                 <OtherInstitutions />
               </div> 
-              <div>
-                <h2 className='text-2xl text-white py-8 font-bold'>Notifications From Students:</h2>
+              <div className='py-6 pb-16'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Notifications From Students:</h2>
                 <NotificationsFromStudents />
               </div> 
             </TabsContent>

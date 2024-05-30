@@ -61,7 +61,7 @@ function NotificationsFromStudents() {
         <div className="border border-gray-500 rounded-md overflow-hidden">
             <Table>
                 <TableHeader>
-                    <TableRow>
+                    <TableRow className='bg-gray-700'>
                         <TableHead className="text-white font-semibold border border-gray-500">Name</TableHead>
                         <TableHead className="text-white font-semibold border border-gray-500">Email</TableHead>
                         <TableHead className="text-white font-semibold border border-gray-500">Recipient University</TableHead>
@@ -72,11 +72,11 @@ function NotificationsFromStudents() {
                 <TableBody>
                     {studentTranscripts.map((student, index) => (
                         <TableRow key={index} className='border-b border-gray-500'>
-                            <TableCell className='text-gray-400 border border-gray-500'>{student.name}</TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'>{student.email}</TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'>{student.recipientUniversity}</TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'>{student.phone}</TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'>{student.arrivedTime}</TableCell>
+                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.name}</h4></TableCell>
+                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.email}</h4></TableCell>
+                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.recipientUniversity}</h4></TableCell>
+                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.phone}</h4></TableCell>
+                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.arrivedTime}</h4></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
