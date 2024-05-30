@@ -1,9 +1,9 @@
-import * as React from "react"
+import * as React from "react";
 import {
     CaretSortIcon,
     ChevronDownIcon,
     DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
+} from "@radix-ui/react-icons";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -15,20 +15,26 @@ import {
     getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
-} from "@tanstack/react-table"
-
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@tanstack/react-table";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
     Table,
     TableBody,
@@ -36,15 +42,15 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import Link from "next/link"
+} from "@/components/ui/table";
+import Link from "next/link";
 
 export type Student = {
-    id: string
-    name: string
-    email: string
-    phoneNumber: string
-}
+    id: string;
+    name: string;
+    email: string;
+    phoneNumber: string;
+};
 
 const data: Student[] = [
     {
@@ -77,8 +83,29 @@ const data: Student[] = [
         email: "carmella@hotmail.com",
         phoneNumber: "567-890-1234",
     },
-]
-
+];
+function CustomDialog({ isOpen, onClose }) {
+    return (
+        // Render the dialog only if isOpen is true
+        isOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg">
+                    <div className="flex justify-between">
+                        <h2 className="text-xl font-semibold">Student Transcript</h2>
+                        <button onClick={onClose}>Close</button>
+                    </div>
+                    <div className="py-4">
+                        {/* Dialog content */}
+                        <p>Make changes to your profile here. Click save when you're done.</p>
+                    </div>
+                    <div className="flex justify-end">
+                        <Button onClick={onClose}>Save changes</Button>
+                    </div>
+                </div>
+            </div>
+        )
+    );
+}
 export const columns: ColumnDef<Student>[] = [
     {
         id: "select",
@@ -104,32 +131,28 @@ export const columns: ColumnDef<Student>[] = [
     },
     {
         accessorKey: "name",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Name
-                    <CaretSortIcon className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Name
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        ),
         cell: ({ row }) => <div>{row.getValue("name")}</div>,
     },
     {
         accessorKey: "email",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Email
-                    <CaretSortIcon className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+                Email
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+            </Button>
+        ),
         cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
     },
     {
@@ -137,16 +160,39 @@ export const columns: ColumnDef<Student>[] = [
         header: () => <div>Phone Number</div>,
         cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
     },
-]
+    {
+        id: "actions",
+        header: () => <div>Actions</div>,
+        cell: () => (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost">
+                        <DotsHorizontalIcon className="h-5 w-5" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                    <Button variant="outline" className="ml-auto" onClick={toggleDialog}>
+                    Transcript
+                </Button>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
+];
 
 export default function StudentsList() {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
+    const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = React.useState({});
+    const [showDialog, setShowDialog] = React.useState(false);
+    const toggleDialog = () => {
+        setShowDialog(!showDialog);
+    };
 
     const table = useReactTable({
         data,
@@ -165,7 +211,7 @@ export default function StudentsList() {
             columnVisibility,
             rowSelection,
         },
-    })
+    });
 
     return (
         <div className="w-full">
@@ -185,23 +231,16 @@ export default function StudentsList() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
+                        {table.getAllColumns().map((column) => (
+                            <DropdownMenuCheckboxItem
+                                key={column.id}
+                                className="capitalize"
+                                checked={column.getIsVisible()}
+                                onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                            >
+                                {column.id}
+                            </DropdownMenuCheckboxItem>
+                        ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -210,36 +249,36 @@ export default function StudentsList() {
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead className="border border-gray-400 text-white" key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead
+                                        className="border border-gray-400 text-white"
+                                        key={header.id}
+                                    >
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow className="border border-gray-400"
+                                <TableRow
+                                    className="border border-gray-400"
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="py-3" key={cell.id}>
-                                            <Link href="/institution/dashboard/student-profile">
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </Link>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
                                         </TableCell>
                                     ))}
                                 </TableRow>
@@ -281,6 +320,7 @@ export default function StudentsList() {
                     </Button>
                 </div>
             </div>
+            <CustomDialog isOpen={showDialog} onClose={toggleDialog} />
         </div>
-    )
+    );
 }

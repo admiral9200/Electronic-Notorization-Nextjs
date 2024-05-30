@@ -137,7 +137,7 @@ const cardData = [
         status: "Pending",
         imgSrc: '/images/avatars/rafalkowalski.jpeg'
     },
-        {
+    {
         name: "Jane Doe",
         school: "Sunnydale High",
         email: "janedoe@example.com",
@@ -332,14 +332,14 @@ function TranscriptStatus() {
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-center mt-5">
+            <div className="flex justify-end mt-5">
                 <nav>
-                    <ul className="inline-flex items-center space-x-2">
+                    <ul className="inline-flex items-center space-x-2 mr-5">
                         {Array.from({ length: totalPages }, (_, index) => (
                             <li key={index}>
                                 <button
                                     onClick={() => paginate(index + 1)}
-                                    className={`w-8 h-8 rounded-full leading-tight border border-gray-300 hover:bg-gray-100 hover:text-black ${currentPage === index + 1 ? 'bg-white text-black' : 'bg-gray-500 text-white'
+                                    className={`w-7 h-7 text-xs rounded-full leading-tight border border-gray-300 hover:bg-gray-100 hover:text-black ${currentPage === index + 1 ? 'bg-white text-black' : 'bg-black text-white'
                                         }`}
                                 >
                                     {index + 1}
@@ -347,6 +347,7 @@ function TranscriptStatus() {
                             </li>
                         ))}
                     </ul>
+
                 </nav>
             </div>
         </div>
