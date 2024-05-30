@@ -137,6 +137,102 @@ const cardData = [
         status: "Pending",
         imgSrc: '/images/avatars/rafalkowalski.jpeg'
     },
+        {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Jane Doe",
+        school: "Sunnydale High",
+        email: "janedoe@example.com",
+        recipientUniversity: "MIT",
+        status: "Rejected",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
+    {
+        name: "Adword Smith",
+        school: "Oakwood Academy",
+        email: "smith@john.com",
+        recipientUniversity: "Stanford University",
+        status: "Pending",
+        imgSrc: '/images/avatars/rafalkowalski.jpeg'
+    },
 ];
 
 function TranscriptStatus() {
@@ -180,10 +276,10 @@ function TranscriptStatus() {
                     placeholder="Search by Name"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent ml-auto lg:w-1/6 border border-white text-gray-900 text-sm rounded-lg block w-full px-2.5 py-1.5"
+                    className="bg-transparent ml-auto lg:w-1/6 border border-white text-white text-sm rounded-lg block w-full px-2.5 py-1.5"
                 />
             </div>
-            <div className="h-72 overflow-auto">
+            <div className="h-[400px] overflow-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -238,14 +334,13 @@ function TranscriptStatus() {
             </div>
             <div className="flex justify-center mt-4">
                 <nav>
-                    <ul className="inline-flex items-center -space-x-px">
+                    <ul className="inline-flex items-center space-x-2">
                         {Array.from({ length: totalPages }, (_, index) => (
                             <li key={index}>
                                 <button
                                     onClick={() => paginate(index + 1)}
-                                    className={`px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                                        currentPage === index + 1 ? 'bg-gray-100 dark:bg-gray-700' : ''
-                                    }`}
+                                    className={`w-8 h-8 rounded-full leading-tight border border-gray-300 hover:bg-gray-100 hover:text-black ${currentPage === index + 1 ? 'bg-white text-black' : 'bg-gray-500 text-white'
+                                        }`}
                                 >
                                     {index + 1}
                                 </button>
