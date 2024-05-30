@@ -3,9 +3,9 @@ import React from 'react'
 function StudentProfile() {
   return (
     <div className='py-36'>
-      <div className='bg-white w-1/2 mx-auto rounded-md py-8'>
+      <div className='bg-white w-3/4 mx-auto rounded-lg py-8 pb-12'>
         <div className='flex justify-between items-center border-b border-gray-500  px-5 pb-5'>
-          <img className="w-20 h-20 rounded-full border border-white" src="/images/avatars/pjborowiecki.jpeg" alt="Preview" />
+          <img className="w-24 h-24 rounded-full border border-white" src="/images/avatars/pjborowiecki.jpeg" alt="Preview" />
           <div className='text-right'>
             <h3 className="text-xl font-bold text-black">Christopher</h3>
             <h3 className="text-lg font- text-black">Smith</h3>

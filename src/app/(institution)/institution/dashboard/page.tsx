@@ -14,6 +14,8 @@ import { Overview } from './components/overview'
 import { WebSocketProvider } from 'next-ws/client'
 import { RecentOrders } from './components/recent-orders'
 import StudentsList from './components/students-list'
+import TranscriptStatus from './components/transcript-status'
+import OtherInstitutions from './components/other-institutions'
 
 export default function Dashboard() {
   return (
@@ -155,6 +157,14 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
+              <div>
+                <h2 className='text-2xl text-white py-5 font-bold'>Transcript Status:</h2>
+                <TranscriptStatus />
+              </div> 
+              <div>
+                <h2 className='text-2xl text-white py-5 font-bold'>Other Institutions:</h2>
+                <OtherInstitutions />
+              </div> 
             </TabsContent>
             <TabsContent value='students' className='space-y-4'>
                <StudentsList />
