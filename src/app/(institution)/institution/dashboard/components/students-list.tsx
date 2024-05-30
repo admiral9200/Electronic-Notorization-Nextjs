@@ -1,49 +1,16 @@
-import * as React from "react";
-import {
-    CaretSortIcon,
-    ChevronDownIcon,
-    DotsHorizontalIcon,
-} from "@radix-ui/react-icons";
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+import React, { useState } from "react";
+// import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 
 export type Student = {
     id: string;
@@ -84,105 +51,48 @@ const data: Student[] = [
         phoneNumber: "567-890-1234",
     },
 ];
+
 function CustomDialog({ isOpen, onClose }) {
+    const [showPDF, setShowPDF] = useState(false);
+
+    const handlePDFPreview = () => {
+        setShowPDF(true);
+    };
+
     return (
         // Render the dialog only if isOpen is true
         isOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-white p-6 rounded-lg">
+                <div className="bg-white p-6 rounded-lg w-1/2">
                     <div className="flex justify-between">
-                        <h2 className="text-xl font-semibold">Student Transcript</h2>
+                        <h2 className="text-xl font-semibold mb-3 text-black">Student Transcript</h2>
                         <button onClick={onClose}>Close</button>
                     </div>
-                    <div className="py-4">
-                        {/* Dialog content */}
-                        <p>Make changes to your profile here. Click save when you're done.</p>
+                    <div className="py-2 ">
+                        {showPDF ? (
+                            <iframe
+                                src="https://taleemdostforum.com/Transcript.pdf"
+                                className="w-full h-96"
+                                title="PDF Preview"
+                            ></iframe>
+                        ) : (
+                            <button
+                                className="border border-black rounded-md py-2 px-4 text-black"
+                                onClick={handlePDFPreview}
+                            >
+                                Transcript.pdf
+                            </button>
+                        )}
                     </div>
-                    <div className="flex justify-end">
-                        <Button onClick={onClose}>Save changes</Button>
+                    <div className="flex justify-end mt-3">
+                        <Button className="px-4 py-2 bg-gray-700 text-white hover:bg-white hover:text-gray-700 border border-gray-600" onClick={() => { setShowPDF(false); onClose(); }}>Close</Button>
                     </div>
                 </div>
             </div>
         )
     );
 }
-export const columns: ColumnDef<Student>[] = [
-    {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
-        accessorKey: "name",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Name
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-            </Button>
-        ),
-        cell: ({ row }) => <div>{row.getValue("name")}</div>,
-    },
-    {
-        accessorKey: "email",
-        header: ({ column }) => (
-            <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-                Email
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-            </Button>
-        ),
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-        accessorKey: "phoneNumber",
-        header: () => <div>Phone Number</div>,
-        cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
-    },
-    {
-        id: "actions",
-        header: () => <div>Actions</div>,
-        cell: () => (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">
-                        <DotsHorizontalIcon className="h-5 w-5" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                    <Button variant="outline" className="ml-auto" onClick={toggleDialog}>
-                    Transcript
-                </Button>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-];
+
 
 export default function StudentsList() {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -190,9 +100,88 @@ export default function StudentsList() {
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [showDialog, setShowDialog] = React.useState(false);
+
     const toggleDialog = () => {
         setShowDialog(!showDialog);
     };
+
+    const columns: ColumnDef<Student>[] = [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Select row"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: "name",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Name
+                    <CaretSortIcon className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => <div>{row.getValue("name")}</div>,
+        },
+        {
+            accessorKey: "email",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Email
+                    <CaretSortIcon className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        },
+        {
+            accessorKey: "phoneNumber",
+            header: () => <div>Phone Number</div>,
+            cell: ({ row }) => <div>{row.getValue("phoneNumber")}</div>,
+        },
+        {
+            id: "actions",
+            header: () => <div>Actions</div>,
+            cell: ({ row }) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost">
+                            <DotsHorizontalIcon className="h-5 w-5" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem>
+                            <Button className="border-none p-0 mx-auto" variant="outline" onClick={toggleDialog}>
+                                Transcript
+                            </Button>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+    ];
 
     const table = useReactTable({
         data,
