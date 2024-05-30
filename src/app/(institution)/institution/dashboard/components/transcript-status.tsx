@@ -270,13 +270,13 @@ function TranscriptStatus() {
 
     return (
         <div className="relative shadow-md sm:rounded-lg">
-            <div className='text-right mb-4'>
+            <div className=' mb-4'>
                 <input
                     type="text"
                     placeholder="Search by Name"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent ml-auto lg:w-1/6 border border-white text-white text-sm rounded-lg block w-full px-2.5 py-1.5"
+                    className="bg-transparent lg:w-1/6 border border-white text-white text-sm rounded-lg block w-full px-2.5 py-1.5"
                 />
             </div>
             <div className="h-[400px] overflow-auto">
@@ -332,7 +332,7 @@ function TranscriptStatus() {
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-5">
                 <nav>
                     <ul className="inline-flex items-center space-x-2">
                         {Array.from({ length: totalPages }, (_, index) => (
