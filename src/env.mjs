@@ -23,7 +23,7 @@ export const env = createEnv({
     AWS_REGION: z.string(),
     AWS_ACCESS_KEY_ID: z.string(),
     AWS_SECRET_ACCESS_KEY: z.string(),
-    OPEN_AI_KEY: z.string()
+    OPEN_AI_KEY: z.string(),
   },
 
   /**

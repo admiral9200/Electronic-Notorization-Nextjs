@@ -1,14 +1,8 @@
 import * as z from "zod"
 
-const fileSchema = z.object({
-    name: z.string().refine((name) => name.endsWith('.pdf'), 'File must be a PDF'),
-    type: z.literal('application/pdf'),
-    size: z.number().max(5 * 1024 * 1024, 'File size must not exceed 5MB')
-})
-
 export const transcriptFormSchema = z.object({
     userId: z
-        .number({
+        .string({
             required_error: "User Id is required"
         }),
     name: z
@@ -23,10 +17,9 @@ export const transcriptFormSchema = z.object({
         .string({ required_error: "Institution id must be selected." }),
     aimedInstitutionId: z
         .string({ required_error: "Recipient university id must be selected." }),
-    transcript: z.union([
-        fileSchema,
-        z.null()
-    ])
+    transcript: z
+        .instanceof(File)
+        .refine((file) => file.size !== 0, "Please upload an image"),
 })
 
 export type TranscriptFormInput = z.infer<typeof transcriptFormSchema>

@@ -1,4 +1,6 @@
-import React from "react"
+"use client"
+
+import React, { useCallback, useState } from "react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -10,44 +12,33 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { useForm } from "react-hook-form"
+import { useController, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TranscriptFormInput, transcriptFormSchema } from "@/validations/transcript"
 import { submitTranscriptForm } from "@/actions/transcript"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { Icons } from "@/components/icons"
+import { FileWithPath, useDropzone } from "react-dropzone"
+import { ImagePlus } from "lucide-react"
 
 
 export function TranscriptSubmitForm(): JSX.Element {
     const { toast } = useToast()
     const [isPending, startTransition] = React.useTransition()
+    const [files, setFiles] = useState<FileWithPath[]>([])
+    const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
 
     const router = useRouter()
 
-    const [transcriptData, setTranscriptData] = React.useState<TranscriptFormInput>({
-        userId: 0,
-        name: "",
-        institutionId: "0",
-        aimedInstitutionId: "0",
-        transcript: null
-    });
-
     const form = useForm<TranscriptFormInput>({
         resolver: zodResolver(transcriptFormSchema),
-        defaultValues: transcriptData
+        mode: "onBlur",
+        defaultValues: {
+            transcript: new File([""], "filename")
+        }
     })
 
 
@@ -57,23 +48,28 @@ export function TranscriptSubmitForm(): JSX.Element {
     const onSubmit = (formData: TranscriptFormInput) => {
         startTransition(async () => {
             try {
-                const message = await submitTranscriptForm(formData)
+                console.log(formData)
+                toast({
+                    title: "Thank you!",
+                    description: "Your message has been sent",
+                })
+                // const message = await submitTranscriptForm(formData)
 
-                switch (message) {
-                    case "success":
-                        toast({
-                            title: "Thank you!",
-                            description: "Your message has been sent",
-                        })
-                        form.reset()
-                        break
-                    default:
-                        toast({
-                            title: "Something went wrong",
-                            description: "Please try again",
-                            variant: "destructive",
-                        })
-                }
+                // switch (message) {
+                //     case "success":
+                //         toast({
+                //             title: "Thank you!",
+                //             description: "Your message has been sent",
+                //         })
+                //         form.reset()
+                //         break
+                //     default:
+                //         toast({
+                //             title: "Something went wrong",
+                //             description: "Please try again",
+                //             variant: "destructive",
+                //         })
+                // }
             } catch (error) {
                 toast({
                     description: "Something went wrong. Please try again",
@@ -94,6 +90,30 @@ export function TranscriptSubmitForm(): JSX.Element {
 
         router.push("/student/dashboard")
     }
+
+    const onDrop = React.useCallback(
+        (acceptedFiles: File[]) => {
+            const reader = new FileReader();
+            try {
+                reader.onload = () => setPreview(reader.result);
+                reader.readAsDataURL(acceptedFiles[0]);
+                form.setValue("transcript", acceptedFiles[0]);
+                form.clearErrors("transcript");
+            } catch (error) {
+                setPreview(null);
+                form.resetField("transcript");
+            }
+        },
+        [form],
+    );
+
+    const { getRootProps, getInputProps, isDragActive, fileRejections } =
+        useDropzone({
+            onDrop,
+            maxFiles: 1,
+            maxSize: 1000000,
+            accept: { "image/png": [], "image/jpg": [], "image/jpeg": [] },
+        });
 
     return (
         <div className="flex min-h-screen w-full flex-col">
@@ -136,7 +156,7 @@ export function TranscriptSubmitForm(): JSX.Element {
                                                 <FormItem>
                                                     <FormLabel>UserId</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="number" placeholder="10" {...field} />
+                                                        <Input type="string" placeholder="10" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
@@ -185,46 +205,77 @@ export function TranscriptSubmitForm(): JSX.Element {
                                             )}
                                         />
 
-
-                                        {/* <FormField
+                                        <FormField
                                             control={form.control}
                                             name="transcript"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Transcript</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Input type="file" {...field} />
+                                            render={() => (
+                                                <FormItem className="mx-auto md:w-1/2">
+                                                    <FormLabel
+                                                        className={`${fileRejections.length !== 0 && "text-destructive"
+                                                            }`}
+                                                    >
+                                                        <h2 className="text-xl font-semibold tracking-tight">
+                                                            Upload your image
+                                                            <span
+                                                                className={
+                                                                    form.formState.errors.transcript || fileRejections.length !== 0
+                                                                        ? "text-destructive"
+                                                                        : "text-muted-foreground"
+                                                                }
+                                                            ></span>
+                                                        </h2>
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <div
+                                                            {...getRootProps()}
+                                                            className="mx-auto flex cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground p-8 shadow-sm shadow-foreground"
+                                                        >
+                                                            {preview && (
+                                                                <img
+                                                                    src={preview as string}
+                                                                    alt="Uploaded image"
+                                                                    className="max-h-[400px] rounded-lg"
+                                                                />
+                                                            )}
+                                                            <ImagePlus
+                                                                className={`size-40 ${preview ? "hidden" : "block"}`}
+                                                            />
+                                                            <Input {...getInputProps()} type="file" />
+                                                            {isDragActive ? (
+                                                                <p>Drop the image!</p>
+                                                            ) : (
+                                                                <p>Click here or drag an image to upload it</p>
+                                                            )}
+                                                        </div>
                                                     </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
+                                                    <FormMessage>
+                                                        {fileRejections.length !== 0 && (
+                                                            <p>
+                                                                Image must be less than 1MB and of type png, jpg, or jpeg
+                                                            </p>
+                                                        )}
+                                                    </FormMessage>
                                                 </FormItem>
                                             )}
-                                        /> */}
+                                        />
+
+
+                                        <Button
+                                            variant="outline"
+                                            className="h-14 border bg-gradient-to-br from-pink-600/70 to-purple-400/70 text-lg font-bold tracking-wide hover:opacity-70"
+                                        >
+                                            {isPending && (
+                                                <Icons.spinner
+                                                    className="mr-2 size-4 animate-spin"
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                            {isPending ? "Sending..." : "Send"}
+                                            <span className="sr-only">Submit contact form</span>
+                                        </Button>
                                     </form>
                                 </Form>
                             </CardContent>
-                            <CardFooter className="border-t px-6 py-4">
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="outline">Submit my transcript</Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. You cannot cancel your application once submit.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction>
-                                                <Button onClick={handleSubmit}>
-                                                    Continue
-                                                </Button>
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </CardFooter>
                         </Card>
                     </div>
                 </div>
