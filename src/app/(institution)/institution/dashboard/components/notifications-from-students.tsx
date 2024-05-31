@@ -62,21 +62,21 @@ function NotificationsFromStudents() {
             <Table>
                 <TableHeader>
                     <TableRow className='bg-gray-700'>
-                        <TableHead className="text-white font-semibold border border-gray-500">Name</TableHead>
-                        <TableHead className="text-white font-semibold border border-gray-500">Email</TableHead>
-                        <TableHead className="text-white font-semibold border border-gray-500">Recipient University</TableHead>
-                        <TableHead className="text-white font-semibold border border-gray-500">Phone</TableHead>
-                        <TableHead className="text-white font-semibold border border-gray-500">Arrived Time</TableHead>
+                        <TableHead className="text-white font-semibold border border-gray-500"><h4 className='w-max'>Name</h4></TableHead>
+                        <TableHead className="text-white font-semibold border border-gray-500"><h4 className='w-max'>Email</h4></TableHead>
+                        <TableHead className="text-white font-semibold border border-gray-500"><h4 className='w-max'>Recipient University</h4></TableHead>
+                        <TableHead className="text-white font-semibold border border-gray-500"><h4 className='w-max'>Phone</h4></TableHead>
+                        <TableHead className="text-white font-semibold border border-gray-500"><h4 className='w-max'>Arrived</h4> Time</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {studentTranscripts.map((student, index) => (
                         <TableRow key={index} className='border-b border-gray-500'>
-                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.name}</h4></TableCell>
-                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.email}</h4></TableCell>
-                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.recipientUniversity}</h4></TableCell>
-                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.phone}</h4></TableCell>
-                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.arrivedTime}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1 w-max'>{student.name}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1 w-max'>{student.email}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1 w-max'>{student.recipientUniversity}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1 w-max'>{student.phone}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1 w-max'>{student.arrivedTime}</h4></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

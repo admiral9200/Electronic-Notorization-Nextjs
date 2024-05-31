@@ -1,3 +1,4 @@
+import { Input } from '@/components/ui/input';
 import React, { useState } from 'react';
 
 const cardData = [
@@ -271,29 +272,39 @@ function TranscriptStatus() {
     return (
         <div className="relative shadow-md sm:rounded-lg">
             <div className=' mb-4'>
-                <input
-                    type="text"
-                    placeholder="Search by Name"
+                <Input type="text"
+                    placeholder="Search Student"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent lg:w-1/6 border border-gray-200 text-gray-200 placeholder:text-gray-200 text-sm rounded-lg block w-full px-2.5 py-1.5"
-                />
+                    className='w-[20%]'/>
+                {/* <input
+                    
+                    className="bg-transparent focus-visible:border-gray-400 lg:w-1/6 border border-gray-400 text-gray-200 placeholder:text-gray-200 placeholder:text-sm text-sm rounded-sm block w-full px-2.5 py-1.5"
+                /> */}
             </div>
             <div className="h-[400px] overflow-auto">
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
+                                <h4 className='w-max'>
                                 Name
+                                </h4>
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                <h4 className='w-max'>
                                 School
+                                </h4>
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Recipient University
+                                <h4 className='w-max'>
+                                RecipientUniversity
+                                </h4> 
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                <h4 className='w-max'>
                                 Status
+                                </h4>
                             </th>
                         </tr>
                     </thead>
@@ -314,10 +325,10 @@ function TranscriptStatus() {
                                     </div>
                                 </th>
                                 <td className="text-sm text-gray-100 px-6 py-3">
-                                    {user.school}
+                                   <h4 className='w-max'> {user.school}</h4>
                                 </td>
                                 <td className="text-sm text-gray-100 px-6 py-3">
-                                    {user.recipientUniversity}
+                                   <h4 className='w-max'> {user.recipientUniversity}</h4>
                                 </td>
                                 <td className="px-6 py-3">
                                     <div className="flex items-center">

@@ -87,7 +87,7 @@ function CustomDialog({ isOpen, onClose }) {
   return (
     isOpen && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-lg w-1/2">
+        <div className="bg-white p-6 rounded-lg w-2/3">
           <div className="flex justify-between">
             <h2 className="text-xl font-semibold mb-3 text-black">Student Credentials</h2>
             <button onClick={onClose}>Close</button>
