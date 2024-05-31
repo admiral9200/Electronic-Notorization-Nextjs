@@ -134,7 +134,7 @@ export function SignUpWithPasswordForm(): JSX.Element {
           )}
         />
 
-        <div className="flex justify-center space-x-3 my-2">
+        {/* <div className="flex justify-center space-x-3 my-2">
           <div>
             <input
               type="radio"
@@ -173,7 +173,7 @@ export function SignUpWithPasswordForm(): JSX.Element {
               Institution
             </label>
           </div>
-        </div>
+        </div> */}
 
         <Button disabled={isPending}>
           {isPending ? (
