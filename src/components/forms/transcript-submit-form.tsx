@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -8,101 +8,63 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { useController, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TranscriptFormInput, transcriptFormSchema } from "@/validations/transcript"
-import { submitTranscriptForm } from "@/actions/transcript"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
-import { FileWithPath, useDropzone } from "react-dropzone"
-import { Check, ChevronsUpDown, ImagePlus } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { useDropzone } from "react-dropzone"
+import { ImagePlus } from "lucide-react"
+import {
+    Popover,
+    PopoverTrigger
+} from "@/components/ui/popover"
+import { Institution } from "@prisma/client"
 import { cn } from "@/lib/utils"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
-import { Institution, InstitutionType } from "@prisma/client"
+import { useSession } from "next-auth/react"
+import { getInstitutionByUserEmail } from "@/actions/institutions"
 
+interface TranscriptSubmitFormProps {
+    id: string,
+    institutions: Institution[]
+}
 
-const frameworks = [
-    {
-        value: "next.js",
-        label: "Next.js",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
-
-const institutions: Institution[] = [
-    {
-        id: 1,
-        name: "University of Oxford",
-        location: "Oxford, UK",
-        genre: InstitutionType.UNIVERSITY,
-        email: "info@ox.ac.uk",
-        logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-        wallet: ""
-    },
-    {
-        id: 2,
-        name: "Bluesky Community College",
-        location: "Seattle, USA",
-        genre: InstitutionType.COLLEGE,
-        email: "info@blueskycollege.edu",
-        logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-        wallet: ""
-    },
-    {
-        id: 3,
-        name: "Oakwood Academy",
-        location: "Chicago, USA",
-        genre: InstitutionType.SCHOOL,
-        email: "info@oakwoodacademy.org",
-        logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-        wallet: ""
-    },
-]
-
-export function TranscriptSubmitForm(): JSX.Element {
+export function TranscriptSubmitForm({
+    id,
+    institutions
+}: TranscriptSubmitFormProps): JSX.Element {
     const { toast } = useToast()
     const [isPending, startTransition] = React.useTransition()
-    const [files, setFiles] = useState<FileWithPath[]>([])
     const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+
+    const [institution, setInstitution] = useState<Institution | null>(null)
 
     const router = useRouter()
+    const session = useSession()
 
     const form = useForm<TranscriptFormInput>({
         resolver: zodResolver(transcriptFormSchema),
-        mode: "onBlur",
-        defaultValues: {
-            transcript: new File([""], "filename")
-        }
+        mode: "onBlur"
     })
+
+    useEffect(() => {
+        const fetchInstitution = async () => {
+          const institution = await getInstitutionByUserEmail(session.data?.user.email);
+          setInstitution(institution);
+        };
+        fetchInstitution();
+      }, [session.data?.user]);
 
 
     /**
-     * 
+     * This function is used to submit the transcript form...
      */
     const onSubmit = (formData: TranscriptFormInput) => {
         startTransition(async () => {
@@ -178,7 +140,6 @@ export function TranscriptSubmitForm(): JSX.Element {
 
     return (
         <div className="flex min-h-screen w-full flex-col">
-
             <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="mx-auto grid w-full max-w-6xl gap-2">
                     <h1 className="text-3xl font-semibold">Settings</h1>
@@ -209,7 +170,9 @@ export function TranscriptSubmitForm(): JSX.Element {
                                             control={form.control}
                                             name="userId"
                                             render={({ field }) => (
-                                                <FormItem>
+                                                <FormItem
+                                                    hidden
+                                                >
                                                     <FormLabel>UserId</FormLabel>
                                                     <FormControl className="h-12">
                                                         <Input type="string" placeholder="10" {...field} />
@@ -236,15 +199,33 @@ export function TranscriptSubmitForm(): JSX.Element {
                                         <FormField
                                             control={form.control}
                                             name="institutionId"
-                                            render={({ field }) => (
-                                                <FormItem>
+                                            render={({ field }) => {
+                                                useEffect(() => {
+                                                    field.value = String(institution?.id)
+                                                }, [form, institution?.id])
+                                                return (
+                                                    <FormItem>
                                                     <FormLabel>My School</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" {...field} />
+                                                        <Popover open={open} onOpenChange={setOpen}>
+                                                            <PopoverTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    role="combobox"
+                                                                    aria-expanded={open}
+                                                                    className="w-full justify-between"
+                                                                >
+                                                                    {
+                                                                        institution?.name || "Loading..."
+                                                                    }
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                        </Popover>
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
-                                            )}
+                                                )
+                                            }}
                                         />
 
                                         <FormField
@@ -254,75 +235,17 @@ export function TranscriptSubmitForm(): JSX.Element {
                                                 <FormItem>
                                                     <FormLabel>Recipient University</FormLabel>
                                                     <FormControl className="h-12">
-                                                        {/* <Input type="text" placeholder="John Smith" {...field} /> */}
                                                         <Popover open={open} onOpenChange={setOpen}>
                                                             <PopoverTrigger asChild>
                                                                 <Button
                                                                     variant="outline"
                                                                     role="combobox"
                                                                     aria-expanded={open}
-                                                                    className="w-[200px] justify-between"
+                                                                    className="w-full justify-between"
                                                                 >
-                                                                    {value
-                                                                        ? [
-                                                                            {
-                                                                                id: 1,
-                                                                                name: "University of Oxford",
-                                                                                location: "Oxford, UK",
-                                                                                genre: InstitutionType.UNIVERSITY,
-                                                                                email: "info@ox.ac.uk",
-                                                                                logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-                                                                                wallet: ""
-                                                                            },
-                                                                            {
-                                                                                id: 2,
-                                                                                name: "Bluesky Community College",
-                                                                                location: "Seattle, USA",
-                                                                                genre: InstitutionType.COLLEGE,
-                                                                                email: "info@blueskycollege.edu",
-                                                                                logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-                                                                                wallet: ""
-                                                                            },
-                                                                            {
-                                                                                id: 3,
-                                                                                name: "Oakwood Academy",
-                                                                                location: "Chicago, USA",
-                                                                                genre: InstitutionType.SCHOOL,
-                                                                                email: "info@oakwoodacademy.org",
-                                                                                logo: 'https://jterrencemedia.wordpress.com/wp-content/uploads/2012/11/wb.jpg',
-                                                                                wallet: ""
-                                                                            },
-                                                                        ].find((institution) => String(institution.id) === value)?.name
-                                                                        : "Select framework..."}
-                                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                                    {institutions.find((institution) => String(institution.id) === id)?.name}
                                                                 </Button>
                                                             </PopoverTrigger>
-                                                            <PopoverContent className="w-[200px] p-0">
-                                                                <Command>
-                                                                    <CommandInput placeholder="Search framework..." />
-                                                                    <CommandEmpty>No framework found.</CommandEmpty>
-                                                                    <CommandGroup>
-                                                                        {institutions.map((institution) => (
-                                                                            <CommandItem
-                                                                                key={institution.id}
-                                                                                value={String(institution.id)}
-                                                                                onSelect={(currentValue) => {
-                                                                                    setValue(currentValue === value ? "" : currentValue)
-                                                                                    setOpen(false)
-                                                                                }}
-                                                                            >
-                                                                                <Check
-                                                                                    className={cn(
-                                                                                        "mr-2 h-4 w-4",
-                                                                                        value === String(institution.id) ? "opacity-100" : "opacity-0"
-                                                                                    )}
-                                                                                />
-                                                                                {institution.name}
-                                                                            </CommandItem>
-                                                                        ))}
-                                                                    </CommandGroup>
-                                                                </Command>
-                                                            </PopoverContent>
                                                         </Popover>
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
