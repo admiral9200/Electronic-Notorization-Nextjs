@@ -70,7 +70,7 @@ export function InstitueAccountForm(): JSX.Element {
                             <p className="text-black text-sm">View Profile</p>
                         </div>
                     </div>
-                    <button className="text-black font-bold border border-black rounded-sm p-2 mr-2" onClick={handleUploadButtonClick}>Upload</button>
+                    <button className="text-gray-600 font-bold border border-gray-500 rounded-sm py-2 text-sm px-4 mr-2" onClick={handleUploadButtonClick}>Upload</button>
                     <input type="file" id="logoInput" className="hidden" onChange={handleLogoChange} />
                 </div>
             </div>

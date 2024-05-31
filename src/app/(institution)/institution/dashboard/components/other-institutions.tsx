@@ -75,11 +75,11 @@ function OtherInstitutions() {
                         <img className='rounded-full w-12 h-12 mx-auto' src={`/images/features/${institution.logo}`} alt="" />
                         <h3 className='mt-2'>{institution.name}</h3>
                     </div>
-                    <Separator className='my-4'/>
+                    <Separator className='my-2 border-gray-500 border' />
                     <div className='flex space-x-2 justify-center'>
-                    <h4 className='text-gray-400' >{institution.location}</h4>
-                    <span>-</span>
-                    <h4 className='text-gray-400' >{institution.type}</h4>
+                        <h4 className='text-gray-300 text-sm' >{institution.location}</h4>
+                        <span>-</span>
+                        <h4 className='text-gray-300 text-sm' >{institution.type}</h4>
                     </div>
                 </div>
             ))}

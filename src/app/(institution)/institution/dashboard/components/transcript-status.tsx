@@ -310,21 +310,21 @@ function TranscriptStatus() {
                                     <img className="w-9 h-9 rounded-full" src={user.imgSrc} alt={`${user.name} image`} />
                                     <div className="ps-3">
                                         <div className="text-sm font-semibold">{user.name}</div>
-                                        <div className="font-normal text-xs text-gray-500">{user.email}</div>
+                                        <div className="font-normal text-xs text-gray-300">{user.email}</div>
                                     </div>
                                 </th>
-                                <td className="text-[13px] px-6 py-3">
+                                <td className="text-sm text-gray-100 px-6 py-3">
                                     {user.school}
                                 </td>
-                                <td className="text-[13px] px-6 py-3">
+                                <td className="text-sm text-gray-100 px-6 py-3">
                                     {user.recipientUniversity}
                                 </td>
                                 <td className="px-6 py-3">
                                     <div className="flex items-center">
                                         <div
-                                            className={`h-2.5 w-2.5 rounded-full ${getStatusColor(user.status)} me-2`}
+                                            className={`h-2.5 w-2.5 rounded-full  ${getStatusColor(user.status)} me-2`}
                                         />
-                                        {user.status}
+                                        <h4 className='text-gray-100 text-sm'>{user.status}</h4>
                                     </div>
                                 </td>
                             </tr>
@@ -339,7 +339,7 @@ function TranscriptStatus() {
                             <li key={index}>
                                 <button
                                     onClick={() => paginate(index + 1)}
-                                    className={`w-7 h-7 text-xs rounded-full leading-tight border border-gray-300 hover:bg-gray-100 hover:text-black ${currentPage === index + 1 ? 'bg-white text-black' : 'bg-black text-white'
+                                    className={`w-7 h-7 text-xs rounded-full leading-tight border border-gray-500 hover:bg-gray-100 hover:text-black ${currentPage === index + 1 ? 'bg-white text-black' : 'bg-gray-700 text-white'
                                         }`}
                                 >
                                     {index + 1}
@@ -347,7 +347,6 @@ function TranscriptStatus() {
                             </li>
                         ))}
                     </ul>
-
                 </nav>
             </div>
         </div>

@@ -72,11 +72,11 @@ function NotificationsFromStudents() {
                 <TableBody>
                     {studentTranscripts.map((student, index) => (
                         <TableRow key={index} className='border-b border-gray-500'>
-                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.name}</h4></TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.email}</h4></TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.recipientUniversity}</h4></TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.phone}</h4></TableCell>
-                            <TableCell className='text-gray-400 border border-gray-500'><h4 className='py-1'>{student.arrivedTime}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.name}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.email}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.recipientUniversity}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.phone}</h4></TableCell>
+                            <TableCell className='text-gray-300 border border-gray-500'><h4 className='py-1'>{student.arrivedTime}</h4></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

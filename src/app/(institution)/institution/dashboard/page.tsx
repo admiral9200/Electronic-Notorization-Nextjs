@@ -159,7 +159,7 @@ export default function Dashboard() {
                 </Card>
               </div>
               <div className='py-6 pt-12'>
-                <h2 className='text-2xl text-white pb-4 font-bold'>Transcript Status:</h2>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Credentials Status:</h2>
                 <TranscriptStatus />
               </div> 
               <div className='py-6'>

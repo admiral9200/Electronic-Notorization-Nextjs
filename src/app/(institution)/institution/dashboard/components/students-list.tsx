@@ -65,7 +65,7 @@ function CustomDialog({ isOpen, onClose }) {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg w-1/2">
                     <div className="flex justify-between">
-                        <h2 className="text-xl font-semibold mb-3 text-black">Student Transcript</h2>
+                        <h2 className="text-xl font-semibold mb-3 text-black">Student Credentials</h2>
                         <button onClick={onClose}>Close</button>
                     </div>
                     <div className="py-2 ">
@@ -169,10 +169,10 @@ export default function StudentsList() {
                             <DotsHorizontalIcon className="h-5 w-5" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                    <DropdownMenuContent align="end" className="bg-card p-0">
+                        <DropdownMenuItem className="p-0 py-1">
                             <Button className="border-none p-0 mx-auto" variant="outline" onClick={toggleDialog}>
-                                Transcript
+                                Credentials
                             </Button>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
