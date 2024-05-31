@@ -25,7 +25,7 @@ function DocumentShow() {
                     <div className="mx-auto max-w-screen-xl px-2 2xl:px-0">
                         <div className="mx-auto max-w-5xl">
                             <div className="mt-6 sm:mt-8">
-                                <form action="#" className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 lg:max-w-xl">
+                                <form action="#" className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-card lg:max-w-xl">
                                     <div className="mb-6 space-y-5">
                                         <div className="col-span-2 sm:col-span-1">
                                             <label htmlFor="full_name" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Full name (as displayed on card)* </label>
@@ -70,7 +70,7 @@ function DocumentShow() {
                                     </div>
 
                                     <div className="mt-6 grow sm:mt-8 lg:mt-0">
-                                    <div className="space-y-4 rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+                                    <div className="space-y-4 rounded-lg bg-gray-50 dark:border-gray-700 dark:bg-card">
                                         <div className="space-y-2">
                                             <dl className="flex items-center justify-between gap-4">
                                                 <dt className="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
