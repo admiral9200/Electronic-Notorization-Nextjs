@@ -45,28 +45,6 @@ const institutions = [
 
 function OtherInstitutions() {
     return (
-        // <div className="border border-gray-500 rounded-md overflow-hidden">
-        //     <Table>
-        //         <TableHeader>
-        //             <TableRow>
-        //                 <TableHead className="text-white font-semibold"><h4 className='ml-2'>Logo</h4></TableHead>
-        //                 <TableHead className="text-white font-semibold">Name</TableHead>
-        //                 <TableHead className='text-white font-semibold'>Location</TableHead>
-        //                 <TableHead className='text-white font-semibold'>Type</TableHead>
-        //             </TableRow>
-        //         </TableHeader>
-        //         <TableBody>
-        //             {institutions.map((institution, index) => (
-        //                 <TableRow key={index} className='border-b border-gray-500'>
-        //                     <TableCell className='text-gray-400'><img className='rounded-full w-8 h-8 my-1 ml-2' src={`/images/features/${institution.logo}`} alt="" /></TableCell>
-        //                     <TableCell className='text-gray-400'>{institution.name}</TableCell>
-        //                     <TableCell className='text-gray-400' >{institution.location}</TableCell>
-        //                     <TableCell className='text-gray-400' >{institution.type}</TableCell>
-        //                 </TableRow>
-        //             ))}
-        //         </TableBody>
-        //     </Table>
-        // </div>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 space-x-4'>
             {institutions.map((institution, index) => (

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
@@ -60,7 +59,6 @@ function CustomDialog({ isOpen, onClose }) {
     };
 
     return (
-        // Render the dialog only if isOpen is true
         isOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg w-1/2">
