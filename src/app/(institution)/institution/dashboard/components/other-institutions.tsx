@@ -46,14 +46,14 @@ const institutions = [
 function OtherInstitutions() {
     return (
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 space-x-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 sm:space-y-0 space-y-4 sm:space-x-4'>
             {institutions.map((institution, index) => (
-                <div key={index} className='border border-gray-500 rounded-md py-4'>
+                <div key={index} className='border border-white rounded-md py-4 shadow-sm shadow-white'>
                     <div className='text-center'>
                         <img className='rounded-full w-12 h-12 mx-auto' src={`/images/features/${institution.logo}`} alt="" />
                         <h3 className='mt-2'>{institution.name}</h3>
                     </div>
-                    <Separator className='my-2 border-gray-500 border' />
+                    <Separator className='my-3 border-white border h-0' />
                     <div className='flex space-x-2 justify-center'>
                         <h4 className='text-gray-300 text-sm' >{institution.location}</h4>
                         <span>-</span>

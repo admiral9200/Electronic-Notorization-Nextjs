@@ -87,7 +87,7 @@ function CustomDialog({ isOpen, onClose }) {
   return (
     isOpen && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-lg w-1/2">
+        <div className="bg-white p-6 rounded-lg w-2/3">
           <div className="flex justify-between">
             <h2 className="text-xl font-semibold mb-3 text-black">Student Credentials</h2>
             <button onClick={onClose}>Close</button>
@@ -116,25 +116,33 @@ export function OrderingDashboard() {
       fileName: "Transcript.pdf",
       name: "John Smith",
       email: "john@smith.com",
-      recipientUniversity: "Adword"
+      recipientUniversity: "Adword",
+      status: 'Approved',
+      submittionDate: "6-2-2022"
     },
     {
       fileName: "My Document.pdf",
       name: "Jane Doe",
       email: "jane@doe.com",
-      recipientUniversity: "Bing"
+      recipientUniversity: "Bing",
+      status:'Pending',
+      submittionDate: "7-5-2024"
     },
     {
       fileName: "Credential.pdf",
       name: "Michael Johnson",
       email: "michael@johnson.com",
-      recipientUniversity: "Yahoo"
+      recipientUniversity: "Yahoo",
+      status:'Failed',
+      submittionDate: "1-9-2021"
     },
     {
       fileName: "Data.pdf",
       name: "Emily Davis",
       email: "emily@davis.com",
-      recipientUniversity: "Google"
+      recipientUniversity: "Google",
+      status:'Approved',
+      submittionDate: "8-3-2020"
     }
   ];
 
@@ -337,7 +345,7 @@ export function OrderingDashboard() {
                 <h2 className="text-3xl font-bold">My Credentials:</h2>
                 <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {credentialData.map((item, index) => (
-                    <div key={index} className="border border-gray-600 bg-card rounded-md p-4 space-y-2.5">
+                    <div key={index} className="border border-gray-600 bg-card rounded-md p-4 space-y-2">
                       <h3>{item.fileName}</h3>
                       <Separator className="bg-gray-700" />
                       <div className="flex space-x-2">
@@ -351,6 +359,14 @@ export function OrderingDashboard() {
                       <div className="flex space-x-2">
                         <h3 className="text-xs text-gray-400">Recipient University:</h3>
                         <h3 className="text-xs">{item.recipientUniversity}</h3>
+                      </div>
+                      <div className="flex space-x-2">
+                        <h3 className="text-xs text-gray-400">Submition Date:</h3>
+                        <h3 className="text-xs">{item.submittionDate}</h3>
+                      </div>
+                      <div className="flex space-x-2">
+                        <h3 className="text-xs text-gray-400">Status:</h3>
+                        <h3 className="text-xs">{item.status}</h3>
                       </div>
                       <Separator className="bg-gray-700" />
                       <div className="text-right">
