@@ -1,4 +1,6 @@
-import React from "react"
+"use client"
+
+import React, { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -6,74 +8,89 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TranscriptFormInput, transcriptFormSchema } from "@/validations/transcript"
-import { submitTranscriptForm } from "@/actions/transcript"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { Icons } from "@/components/icons"
+import { useDropzone } from "react-dropzone"
+import { ImagePlus } from "lucide-react"
+import {
+    Popover,
+    PopoverTrigger
+} from "@/components/ui/popover"
+import { Institution } from "@prisma/client"
+import { cn } from "@/lib/utils"
+import { useSession } from "next-auth/react"
+import { getInstitutionByUserEmail } from "@/actions/institutions"
 
+interface TranscriptSubmitFormProps {
+    id: string,
+    institutions: Institution[]
+}
 
-export function TranscriptSubmitForm(): JSX.Element {
+export function TranscriptSubmitForm({
+    id,
+    institutions
+}: TranscriptSubmitFormProps): JSX.Element {
     const { toast } = useToast()
     const [isPending, startTransition] = React.useTransition()
+    const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
+    const [open, setOpen] = React.useState(false)
+
+    const [institution, setInstitution] = useState<Institution | null>(null)
 
     const router = useRouter()
-
-    const [transcriptData, setTranscriptData] = React.useState<TranscriptFormInput>({
-        userId: 0,
-        name: "",
-        institutionId: "0",
-        aimedInstitutionId: "0",
-        transcript: null
-    });
+    const session = useSession()
 
     const form = useForm<TranscriptFormInput>({
         resolver: zodResolver(transcriptFormSchema),
-        defaultValues: transcriptData
+        mode: "onBlur"
     })
+
+    useEffect(() => {
+        const fetchInstitution = async () => {
+          const institution = await getInstitutionByUserEmail(session.data?.user.email);
+          setInstitution(institution);
+        };
+        fetchInstitution();
+      }, [session.data?.user]);
 
 
     /**
-     * 
+     * This function is used to submit the transcript form...
      */
     const onSubmit = (formData: TranscriptFormInput) => {
         startTransition(async () => {
             try {
-                const message = await submitTranscriptForm(formData)
+                console.log(formData)
+                toast({
+                    title: "Thank you!",
+                    description: "Your message has been sent",
+                })
+                // const message = await submitTranscriptForm(formData)
 
-                switch (message) {
-                    case "success":
-                        toast({
-                            title: "Thank you!",
-                            description: "Your message has been sent",
-                        })
-                        form.reset()
-                        break
-                    default:
-                        toast({
-                            title: "Something went wrong",
-                            description: "Please try again",
-                            variant: "destructive",
-                        })
-                }
+                // switch (message) {
+                //     case "success":
+                //         toast({
+                //             title: "Thank you!",
+                //             description: "Your message has been sent",
+                //         })
+                //         form.reset()
+                //         break
+                //     default:
+                //         toast({
+                //             title: "Something went wrong",
+                //             description: "Please try again",
+                //             variant: "destructive",
+                //         })
+                // }
             } catch (error) {
                 toast({
                     description: "Something went wrong. Please try again",
@@ -95,9 +112,34 @@ export function TranscriptSubmitForm(): JSX.Element {
         router.push("/student/dashboard")
     }
 
+    const onDrop = React.useCallback(
+        (acceptedFiles: File[]) => {
+            const reader = new FileReader();
+            try {
+                reader.onload = () => setPreview(reader.result);
+                reader.readAsDataURL(acceptedFiles[0]);
+                form.setValue("transcript", acceptedFiles[0]);
+                form.clearErrors("transcript");
+            } catch (error) {
+                setPreview(null);
+                form.resetField("transcript");
+            }
+        },
+        [form],
+    );
+
+    const { getRootProps, getInputProps, isDragActive, fileRejections } =
+        useDropzone({
+            onDrop,
+            maxFiles: 1,
+            maxSize: 5000000,
+            accept: {
+                "application/pdf": [".pdf"],
+            },
+        });
+
     return (
         <div className="flex min-h-screen w-full flex-col">
-
             <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="mx-auto grid w-full max-w-6xl gap-2">
                     <h1 className="text-3xl font-semibold">Settings</h1>
@@ -109,11 +151,6 @@ export function TranscriptSubmitForm(): JSX.Element {
                         <Link href="#" className="font-semibold text-primary">
                             General
                         </Link>
-                        <Link href="#">Security</Link>
-                        <Link href="#">Integrations</Link>
-                        <Link href="#">Support</Link>
-                        <Link href="#">Organizations</Link>
-                        <Link href="#">Advanced</Link>
                     </nav>
                     <div className="grid gap-6">
                         <Card x-chunk="dashboard-04-chunk-2">
@@ -133,10 +170,12 @@ export function TranscriptSubmitForm(): JSX.Element {
                                             control={form.control}
                                             name="userId"
                                             render={({ field }) => (
-                                                <FormItem>
+                                                <FormItem
+                                                    hidden
+                                                >
                                                     <FormLabel>UserId</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="number" placeholder="10" {...field} />
+                                                        <Input type="string" placeholder="10" {...field} />
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
@@ -160,15 +199,33 @@ export function TranscriptSubmitForm(): JSX.Element {
                                         <FormField
                                             control={form.control}
                                             name="institutionId"
-                                            render={({ field }) => (
-                                                <FormItem>
+                                            render={({ field }) => {
+                                                useEffect(() => {
+                                                    field.value = String(institution?.id)
+                                                }, [form, institution?.id])
+                                                return (
+                                                    <FormItem>
                                                     <FormLabel>My School</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" {...field} />
+                                                        <Popover open={open} onOpenChange={setOpen}>
+                                                            <PopoverTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    role="combobox"
+                                                                    aria-expanded={open}
+                                                                    className="w-full justify-between"
+                                                                >
+                                                                    {
+                                                                        institution?.name || "Loading..."
+                                                                    }
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                        </Popover>
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
-                                            )}
+                                                )
+                                            }}
                                         />
 
                                         <FormField
@@ -178,53 +235,95 @@ export function TranscriptSubmitForm(): JSX.Element {
                                                 <FormItem>
                                                     <FormLabel>Recipient University</FormLabel>
                                                     <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" {...field} />
+                                                        <Popover open={open} onOpenChange={setOpen}>
+                                                            <PopoverTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    role="combobox"
+                                                                    aria-expanded={open}
+                                                                    className="w-full justify-between"
+                                                                >
+                                                                    {institutions.find((institution) => String(institution.id) === id)?.name}
+                                                                </Button>
+                                                            </PopoverTrigger>
+                                                        </Popover>
                                                     </FormControl>
                                                     <FormMessage className="pt-2 sm:text-sm" />
                                                 </FormItem>
                                             )}
                                         />
 
-
-                                        {/* <FormField
+                                        <FormField
                                             control={form.control}
                                             name="transcript"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Transcript</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Input type="file" {...field} />
+                                            render={() => (
+                                                <FormItem className="mx-auto md:w-1/2">
+                                                    <FormLabel
+                                                        className={`${fileRejections.length !== 0 && "text-destructive"
+                                                            }`}
+                                                    >
+                                                        <h2 className="text-xl font-semibold tracking-tight">
+                                                            Upload your transcript
+                                                            <span
+                                                                className={
+                                                                    form.formState.errors.transcript || fileRejections.length !== 0
+                                                                        ? "text-destructive"
+                                                                        : "text-muted-foreground"
+                                                                }
+                                                            ></span>
+                                                        </h2>
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <div
+                                                            {...getRootProps()}
+                                                            className="mx-auto flex cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground p-8 shadow-sm shadow-foreground"
+                                                        >
+                                                            {preview && (
+                                                                <img
+                                                                    src={preview as string}
+                                                                    alt="Uploaded transcript"
+                                                                    className="max-h-[400px] rounded-lg"
+                                                                />
+                                                            )}
+                                                            <ImagePlus
+                                                                className={`size-40 ${preview ? "hidden" : "block"}`}
+                                                            />
+                                                            <Input {...getInputProps()} type="file" />
+                                                            {isDragActive ? (
+                                                                <p>Drop your transcript!</p>
+                                                            ) : (
+                                                                <p>Click here or drag a transcript to upload it</p>
+                                                            )}
+                                                        </div>
                                                     </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
+                                                    <FormMessage>
+                                                        {fileRejections.length !== 0 && (
+                                                            <p>
+                                                                File must be less than 1MB type must be pdf
+                                                            </p>
+                                                        )}
+                                                    </FormMessage>
                                                 </FormItem>
                                             )}
-                                        /> */}
+                                        />
+
+
+                                        <Button
+                                            variant="outline"
+                                            className="h-14 border bg-gradient-to-br from-pink-600/70 to-purple-400/70 text-lg font-bold tracking-wide hover:opacity-70"
+                                        >
+                                            {isPending && (
+                                                <Icons.spinner
+                                                    className="mr-2 size-4 animate-spin"
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                            {isPending ? "Sending..." : "Send"}
+                                            <span className="sr-only">Submit contact form</span>
+                                        </Button>
                                     </form>
                                 </Form>
                             </CardContent>
-                            <CardFooter className="border-t px-6 py-4">
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="outline">Submit my transcript</Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. You cannot cancel your application once submit.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction>
-                                                <Button onClick={handleSubmit}>
-                                                    Continue
-                                                </Button>
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </CardFooter>
                         </Card>
                     </div>
                 </div>

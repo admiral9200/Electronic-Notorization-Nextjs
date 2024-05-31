@@ -9,16 +9,19 @@ export async function POST(req: Request) {
     })
 
     try {
+        const { data } = await req.json()
         const chatCompletion = await openai.chat.completions.create({
             messages: [
                 {
                     role: 'user',
-                    content: 'hi'
+                    content: 'The data I will provide shortly is data from a college transcript from canada. Provide all valuable data and the total number of credit units in JSON format to tabulate the data accordingly ' 
+                    + '/n' 
+                    +  data
                 }
             ],
             model: 'gpt-4o-2024-05-13'
         })
-        
+
         return NextResponse.json(
             { chatCompletion },
             { status: 200 }

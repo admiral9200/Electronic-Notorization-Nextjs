@@ -1,11 +1,10 @@
 "use client"
 
 import { pdfToImg } from "@/lib/pdf-to-img"
-import { useWebSocket } from "next-ws/client"
-import { useCallback, useEffect, useState } from "react"
-import { toast } from "@/hooks/use-toast"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { extractKeyInfo } from "@/lib/process-with-gpt"
+import { handleDownloadJsonFile } from "@/lib/utils"
 
 enum Status {
     IDLE,
@@ -23,24 +22,10 @@ export default function Page(): JSX.Element {
     const [pagesFinished, setPagesFinished] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
 
-    // routing...
-    const router = useRouter()
-    const ws = useWebSocket()
-
-    /**
-     * Submit the transcript and display a notification and move to the ordering dashboard...
-     */
-    const handleSubmit = async () => {
-        ws?.send("first message")
-
-        toast({
-            title: "Successfully Submitted!",
-            description: "Your transcript is being processed from now!"
-        })
-
-        router.push("/student/dashboard")
-    }
-
+    const [recipientData, setRecipientData] = useState({ email: "recipient@gmail.com", name: "recipient" })
+    const [issuerData, setIssuerData] = useState("https://raw.githubusercontent.com/blockchain-certificates/cert-issuer/master/examples/issuer/profile.json")
+    const [transcriptData, setTranscriptData] = useState<any>(null)
+    const [certificate, setCertificate] = useState(null)
 
     const handleExtractPDF = async (file: File) => {
         if (!file) return
@@ -100,14 +85,57 @@ export default function Page(): JSX.Element {
                 (item: string, index: number) => `Page ${index + 1}:\n${item}\n\n`
             )
 
-            const data = await extractKeyInfo("")
+            const data = await extractKeyInfo(formattedPdfContent)
+            const extractedData = data.choices[0].message.content
 
-            console.log("data: ", data)
+            const startIndex = extractedData.indexOf("```json");
+            const endIndex = startIndex + "```json".length;
+            const jsonPart = extractedData.slice(endIndex);
+
+            const lastIndex = jsonPart.lastIndexOf("```");
+            const result = jsonPart.slice(0, lastIndex);
+
+            console.log("data: ", JSON.parse(result))
+            if (result) {
+                setTranscriptData(JSON.parse(result))
+            }
 
             setTimeout(() => {
                 setStatus(Status.SUCCESS)
                 setPdfContent(formattedPdfContent!)
             }, 1000)
+        }
+    }
+
+    const handleGenerateCertificate = async () => {
+        try {
+            const response = await fetch('/api/blockcerts/create-certificate', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recipientData, transcriptData, issuerData })
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setCertificate(data.certificate)
+                setStatus(Status.PROCESSING)
+
+                await handleDownloadJsonFile(data, "example-test-name")
+                const res = await fetch('/api/blockcerts/issue-certificate', {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: data.certificate })
+                })
+
+                const data_01 = await res.json()
+
+                console.log("data1: ", data_01, data)
+            } else {
+                console.log("error")
+            }
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -133,9 +161,19 @@ export default function Page(): JSX.Element {
                             {pagesFinished} of {totalPages} pages analyzed.
                         </p>
                     ),
-                    [Status.SUCCESS]: <p>PDF successfully analyzed</p>,
+                    [Status.SUCCESS]: (
+                        <div>
+                            <p>PDF successfully analyzed</p>
+                            <button onClick={handleGenerateCertificate}>Create certificate</button>
+                        </div>
+                    ),
                     [Status.ERROR]: <p>Error analyzing PDF.</p>,
-                    [Status.PROCESSING]: <p>Processing the extracted data</p>
+                    [Status.PROCESSING]: (
+                        <div>
+                            <p>Successfully Created!</p>
+
+                        </div>
+                    )
                 }[status]
             }
 

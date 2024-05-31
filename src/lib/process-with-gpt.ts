@@ -1,4 +1,4 @@
-export const extractKeyInfo = async (rawString: string): Promise<string> => {
+export const extractKeyInfo = async (rawString: string[] | undefined): Promise<any> => {
     try {
         const res = await fetch("/api/chatgpt", {
             method: "POST",
@@ -12,8 +12,8 @@ export const extractKeyInfo = async (rawString: string): Promise<string> => {
             throw new Error(`HTTP error ${res.status} with ChatGPT`)
         }
 
-        const { result } = await res.json()
-        return result
+        const { chatCompletion } = await res.json()
+        return chatCompletion
     } catch (error) {
         console.error("Data Processing Error: ", error)
         return ""
