@@ -13,6 +13,10 @@ import { Layout, LayoutBody } from '@/components/custom/layout'
 import { Overview } from './components/overview'
 import { WebSocketProvider } from 'next-ws/client'
 import { RecentOrders } from './components/recent-orders'
+import StudentsList from './components/students-list'
+import TranscriptStatus from './components/transcript-status'
+import OtherInstitutions from './components/other-institutions'
+import NotificationsFromStudents from './components/notifications-from-students'
 
 export default function Dashboard() {
   return (
@@ -154,6 +158,21 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
+              <div className='py-6 pt-12'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Credentials Status:</h2>
+                <TranscriptStatus />
+              </div> 
+              <div className='py-6'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Other Institutions:</h2>
+                <OtherInstitutions />
+              </div> 
+              <div className='py-6 pb-16'>
+                <h2 className='text-2xl text-white pb-4 font-bold'>Notifications From Students:</h2>
+                <NotificationsFromStudents />
+              </div> 
+            </TabsContent>
+            <TabsContent value='students' className='space-y-4'>
+               <StudentsList />
             </TabsContent>
           </Tabs>
         </LayoutBody>

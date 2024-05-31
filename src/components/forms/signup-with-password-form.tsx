@@ -30,6 +30,7 @@ export function SignUpWithPasswordForm(): JSX.Element {
   const router = useRouter()
   const { toast } = useToast()
   const [isPending, startTransition] = React.useTransition()
+  const [userType, setUserType] = React.useState(null);
 
   const form = useForm<SignUpWithPasswordFormInput>({
     resolver: zodResolver(signUpWithPasswordSchema),
@@ -47,6 +48,7 @@ export function SignUpWithPasswordForm(): JSX.Element {
           email: formData.email,
           password: formData.password,
           confirmPassword: formData.confirmPassword,
+          userType: userType,
         })
 
         switch (message) {
@@ -131,6 +133,47 @@ export function SignUpWithPasswordForm(): JSX.Element {
             </FormItem>
           )}
         />
+
+        <div className="flex justify-center space-x-3 my-2">
+          <div>
+            <input
+              type="radio"
+              id="student"
+              className="peer hidden"
+              checked={userType === 'student'}
+              onChange={() => setUserType('student')}
+            />
+            <label
+              htmlFor="student"
+              className={`select-none cursor-pointer rounded-md border-2 border-white
+               py-2 px-6 font-semibold text-sm transition-colors duration-200 ease-in-out ${userType === 'student'
+                  ? 'bg-white text-gray-900 border-white'
+                  : 'text-white'
+                }`}
+            >
+              Student
+            </label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="institution"
+              className="peer hidden"
+              checked={userType === 'institution'}
+              onChange={() => setUserType('institution')}
+            />
+            <label
+              htmlFor="institution"
+              className={`select-none cursor-pointer rounded-md border-2 border-white
+              py-2 px-6 font-semibold text-sm transition-colors duration-200 ease-in-out ${userType === 'institution'
+                  ? 'bg-white text-gray-900 border-white'
+                  : 'text-white'
+                }`}
+            >
+              Institution
+            </label>
+          </div>
+        </div>
 
         <Button disabled={isPending}>
           {isPending ? (

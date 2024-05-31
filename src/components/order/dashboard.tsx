@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -73,8 +74,76 @@ import {
 import {
   TooltipProvider
 } from "@/components/ui/tooltip"
+import React, { useState } from "react"
+
+function CustomDialog({ isOpen, onClose }) {
+  const [showPDF, setShowPDF] = useState(false);
+
+  const handlePDFPreview = () => {
+    setShowPDF(true);
+  };
+
+
+  return (
+    isOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg w-1/2">
+          <div className="flex justify-between">
+            <h2 className="text-xl font-semibold mb-3 text-black">Student Credentials</h2>
+            <button onClick={onClose}>Close</button>
+          </div>
+          <div className="py-2 ">
+            {isOpen && (
+              <iframe
+                src="https://taleemdostforum.com/Transcript.pdf"
+                className="w-full h-96"
+                title="PDF Preview"
+              ></iframe>
+            )}
+          </div>
+          <div className="flex justify-end mt-3">
+            <Button className="px-4 py-2 bg-gray-700 text-white hover:bg-white hover:text-gray-700 border border-gray-600" onClick={() => { setShowPDF(false); onClose(); }}>Close</Button>
+          </div>
+        </div>
+      </div>
+    )
+  );
+}
 
 export function OrderingDashboard() {
+  const credentialData = [
+    {
+      fileName: "Transcript.pdf",
+      name: "John Smith",
+      email: "john@smith.com",
+      recipientUniversity: "Adword"
+    },
+    {
+      fileName: "My Document.pdf",
+      name: "Jane Doe",
+      email: "jane@doe.com",
+      recipientUniversity: "Bing"
+    },
+    {
+      fileName: "Credential.pdf",
+      name: "Michael Johnson",
+      email: "michael@johnson.com",
+      recipientUniversity: "Yahoo"
+    },
+    {
+      fileName: "Data.pdf",
+      name: "Emily Davis",
+      email: "emily@davis.com",
+      recipientUniversity: "Google"
+    }
+  ];
+
+  const [showDialog, setShowDialog] = React.useState(false);
+
+  const toggleDialog = () => {
+    setShowDialog(!showDialog);
+  };
+
   return (
     <TooltipProvider>
       <div className="flex min-h-screen w-full flex-col bg-muted/40 min-h-screen">
@@ -263,6 +332,34 @@ export function OrderingDashboard() {
                   </Card>
                 </TabsContent>
               </Tabs>
+              <div>
+
+                <h2 className="text-3xl font-bold">My Credentials:</h2>
+                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {credentialData.map((item, index) => (
+                    <div key={index} className="border border-gray-600 bg-card rounded-md p-4 space-y-2.5">
+                      <h3>{item.fileName}</h3>
+                      <Separator className="bg-gray-700" />
+                      <div className="flex space-x-2">
+                        <h3 className="text-xs text-gray-400">Name:</h3>
+                        <h3 className="text-xs">{item.name}</h3>
+                      </div>
+                      <div className="flex space-x-2">
+                        <h3 className="text-xs text-gray-400">Email:</h3>
+                        <h3 className="text-xs">{item.email}</h3>
+                      </div>
+                      <div className="flex space-x-2">
+                        <h3 className="text-xs text-gray-400">Recipient University:</h3>
+                        <h3 className="text-xs">{item.recipientUniversity}</h3>
+                      </div>
+                      <Separator className="bg-gray-700" />
+                      <div className="text-right">
+                        <button className="py-1 px-4 text-xs rounded-sm border border-gray-600 hover:text-black hover:bg-white transition-all text-gray-100" onClick={toggleDialog}>Preview</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             <div>
               <Card
@@ -422,6 +519,7 @@ export function OrderingDashboard() {
           </main>
         </div>
       </div>
+      <CustomDialog isOpen={showDialog} onClose={toggleDialog} />
     </TooltipProvider>
   )
 }

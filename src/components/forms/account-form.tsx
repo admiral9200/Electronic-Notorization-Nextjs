@@ -127,10 +127,44 @@ export function AccountForm(): JSX.Element {
         })
     }
 
+    const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
+
+    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoPreview(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUploadButtonClick = () => {
+        const fileInput = document.getElementById("logoInput");
+        if (fileInput) {
+            fileInput.click();
+        }
+    };
+
 
 
     return (
         <Form {...form}>
+            <div className='pb-12'>
+                <h2 className='text-2xl font-bold'>Account Settings:</h2>
+                <div className="bg-white rounded-md px-5 py-4 mt-6 flex justify-between items-center">
+                    <div className="flex space-x-4">
+                        <img className="w-20 h-20 rounded-full border border-white" src={logoPreview ? logoPreview : "/images/avatars/pjborowiecki.jpeg"} alt="Preview" />
+                        <div className="pt-3">
+                            <h3 className="text-xl font-bold text-black">John Doe</h3>
+                            <p className="text-black text-sm">View Profile</p>
+                        </div>
+                    </div>
+                    <button className="text-gray-600 font-bold border border-gray-500 rounded-sm py-2 text-sm px-4 mr-2" onClick={handleUploadButtonClick}>Upload</button>
+                    <input type="file" id="logoInput" className="hidden" onChange={handleLogoChange} />
+                </div>
+            </div>
             <form
                 className="grid w-full gap-8"
                 onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
@@ -143,7 +177,7 @@ export function AccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="text" placeholder="John" {...field} />
+                                    <Input className="border-white border placeholder:text-white" type="text" placeholder="John" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -157,7 +191,7 @@ export function AccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Surname</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="string" placeholder="Smith" {...field} />
+                                    <Input className="border-white border placeholder:text-white" type="string" placeholder="Smith" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -173,7 +207,7 @@ export function AccountForm(): JSX.Element {
                             <FormItem >
                                 <FormLabel>Email</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="email" placeholder="john@smith.com" {...field} disabled />
+                                    <Input className="border-white border placeholder:text-white" type="email" placeholder="john@smith.com" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -187,7 +221,7 @@ export function AccountForm(): JSX.Element {
                             <FormItem>
                                 <FormLabel>Phone number</FormLabel>
                                 <FormControl className="h-12">
-                                    <Input type="tel" placeholder="+1 (555) 123-4567" {...field} />
+                                    <Input className="border-white border placeholder:text-white" type="tel" placeholder="+1 (555) 123-4567" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
@@ -204,7 +238,7 @@ export function AccountForm(): JSX.Element {
                                 <FormLabel>Address</FormLabel>
 
                                 <FormControl className="h-12">
-                                    <Input type="text" placeholder="2618 Ocala Street Orlando Florida 32809 United States" {...field} />
+                                    <Input className="border-white border placeholder:text-white" type="text" placeholder="2618 Ocala Street Orlando Florida 32809 United States" {...field} />
                                 </FormControl>
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
