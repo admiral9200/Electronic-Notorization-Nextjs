@@ -89,7 +89,7 @@ function CustomDialog({ isOpen, onClose }) {
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-6 rounded-lg w-1/2">
           <div className="flex justify-between">
-            <h2 className="text-xl font-semibold mb-3 text-black">Student Transcript</h2>
+            <h2 className="text-xl font-semibold mb-3 text-black">Student Credentials</h2>
             <button onClick={onClose}>Close</button>
           </div>
           <div className="py-2 ">
@@ -334,7 +334,7 @@ export function OrderingDashboard() {
               </Tabs>
               <div>
 
-                <h2 className="text-3xl font-bold">My Transcripts:</h2>
+                <h2 className="text-3xl font-bold">My Credentials:</h2>
                 <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {credentialData.map((item, index) => (
                     <div key={index} className="border border-gray-600 bg-card rounded-md p-4 space-y-2.5">
@@ -354,7 +354,7 @@ export function OrderingDashboard() {
                       </div>
                       <Separator className="bg-gray-700" />
                       <div className="text-right">
-                        <button className="py-1 px-4 text-xs rounded-sm border border-gray-600 hover:text-black hover:bg-white transition-all text-gray-300" onClick={toggleDialog}>Preview</button>
+                        <button className="py-1 px-4 text-xs rounded-sm border border-gray-600 hover:text-black hover:bg-white transition-all text-gray-100" onClick={toggleDialog}>Preview</button>
                       </div>
                     </div>
                   ))}

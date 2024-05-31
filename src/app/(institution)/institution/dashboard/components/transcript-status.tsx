@@ -276,7 +276,7 @@ function TranscriptStatus() {
                     placeholder="Search by Name"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent lg:w-1/6 border border-white text-white text-sm rounded-lg block w-full px-2.5 py-1.5"
+                    className="bg-transparent lg:w-1/6 border border-gray-200 text-gray-200 placeholder:text-gray-200 text-sm rounded-lg block w-full px-2.5 py-1.5"
                 />
             </div>
             <div className="h-[400px] overflow-auto">
