@@ -11,3 +11,25 @@ export async function getInstitutions(): Promise<Institution[]> {
         throw new Error("Fetching institutions error")
     }
 }
+
+export async function getInstitutionByUserEmail(email: string | undefined): Promise<Institution | null> {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email
+            },
+            include: {
+                institution: true
+            }
+        })
+
+        if (!user || !user.institution) {
+            return null
+        }
+
+        return user.institution
+    } catch (error) {
+        console.error(error)
+        throw Error("Fetching institutions error by user email.")
+    }
+}

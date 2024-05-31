@@ -66,7 +66,7 @@ export default function Page() {
     }
 
     const [recipientData, setRecipientData] = useState({ email: "recipient@gmail.com", name: "recipient" })
-    const [issuerData, setIssuerData] = useState({ id: 1, name: "issuer", url: "issuer url", email: "issuer@gmail.com" })
+    const [issuerData, setIssuerData] = useState("https://raw.githubusercontent.com/blockchain-certificates/cert-issuer/master/examples/issuer/profile.json")
     const [certificate, setCertificate] = useState(null)
     const [signedCertificate, setSignedCertificate] = useState(null)
     const [verificationResult, setVerificationResult] = useState(null)
