@@ -23,6 +23,14 @@ enum Role {
   INSTITUTION
 }
 
+enum OrderStatus {
+  SUBMITTED
+  APPROVED
+  PENDING
+  REJECTED
+  ACCEPTED
+}
+
 model Institution {
   id       Int             @id @default(autoincrement())
   name     String          @unique
@@ -109,4 +117,14 @@ model NewsletterSubscriber {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("newsletter_subscribers")
+}
+
+model Order {
+  id                     String      @id @default(cuid())
+  userId                 String      @map("user_id")
+  recipientUniversityId String      @map("recipient_university_id")
+  file                   String
+  status                 OrderStatus @default(SUBMITTED)
+
+  @@map("orders")
 }

@@ -29,6 +29,7 @@ import { Institution } from "@prisma/client"
 import { cn } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { getInstitutionByUserEmail } from "@/actions/institutions"
+import { submitTranscriptForm } from "@/actions/transcript"
 
 interface TranscriptSubmitFormProps {
     id: string,
@@ -43,24 +44,24 @@ export function TranscriptSubmitForm({
     const [isPending, startTransition] = React.useTransition()
     const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
     const [open, setOpen] = React.useState(false)
+    const [file, setFile] = useState<any>(null)
 
     const [institution, setInstitution] = useState<Institution | null>(null)
 
     const router = useRouter()
     const session = useSession()
 
+    /**
+     * TODO: user id catching error...
+     */
     const form = useForm<TranscriptFormInput>({
         resolver: zodResolver(transcriptFormSchema),
-        mode: "onBlur"
-    })
-
-    useEffect(() => {
-        const fetchInstitution = async () => {
-          const institution = await getInstitutionByUserEmail(session.data?.user.email);
-          setInstitution(institution);
-        };
-        fetchInstitution();
-      }, [session.data?.user]);
+        mode: "onBlur",
+        defaultValues: {
+            userId: '1',
+            aimedInstitutionId: id
+        }
+    });
 
 
     /**
@@ -69,7 +70,8 @@ export function TranscriptSubmitForm({
     const onSubmit = (formData: TranscriptFormInput) => {
         startTransition(async () => {
             try {
-                console.log(formData)
+                const res = await sendDataToSchool(formData)
+
                 toast({
                     title: "Thank you!",
                     description: "Your message has been sent",
@@ -112,31 +114,30 @@ export function TranscriptSubmitForm({
         router.push("/student/dashboard")
     }
 
-    const onDrop = React.useCallback(
-        (acceptedFiles: File[]) => {
-            const reader = new FileReader();
-            try {
-                reader.onload = () => setPreview(reader.result);
-                reader.readAsDataURL(acceptedFiles[0]);
-                form.setValue("transcript", acceptedFiles[0]);
-                form.clearErrors("transcript");
-            } catch (error) {
-                setPreview(null);
-                form.resetField("transcript");
-            }
-        },
-        [form],
-    );
 
-    const { getRootProps, getInputProps, isDragActive, fileRejections } =
-        useDropzone({
-            onDrop,
-            maxFiles: 1,
-            maxSize: 5000000,
-            accept: {
-                "application/pdf": [".pdf"],
-            },
-        });
+    /**
+     * This function is used to send transcript submission form data to school...
+     * So it involves uploading file to public folder with specific name...
+     * And also all the string data should be saved to "orders" table...
+     */
+    const sendDataToSchool = async (formData: TranscriptFormInput) => {
+        try {
+            console.log(formData)
+            const formDataObject = new FormData()
+            formDataObject.append('userId', formData.userId)
+            formDataObject.append('aimedInstitutionId', formData.aimedInstitutionId)
+            formDataObject.append('transcript', file)
+
+            const response = await fetch("/api/students/transfer-to-school", {
+                method: "POST",
+                body: formDataObject
+            })
+
+            console.log("response: ", await response.json())
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <div className="flex min-h-screen w-full flex-col">
@@ -155,7 +156,7 @@ export function TranscriptSubmitForm({
                     <div className="grid gap-6">
                         <Card x-chunk="dashboard-04-chunk-2">
                             <CardHeader>
-                                <CardTitle>Fill the required information</CardTitle>
+                                <CardTitle>Fill the required information to send to <u>{institutions.find((institution) => String(institution.id) === id)?.name}</u></CardTitle>
                                 <CardDescription>
                                     In here, you will be able to fill the required information with your information.
                                 </CardDescription>
@@ -166,94 +167,8 @@ export function TranscriptSubmitForm({
                                         className="flex flex-col gap-4"
                                         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
                                     >
-                                        <FormField
-                                            control={form.control}
-                                            name="userId"
-                                            render={({ field }) => (
-                                                <FormItem
-                                                    hidden
-                                                >
-                                                    <FormLabel>UserId</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Input type="string" placeholder="10" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
-                                                </FormItem>
-                                            )}
-                                        />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="name"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Name</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Input type="text" placeholder="John Smith" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="institutionId"
-                                            render={({ field }) => {
-                                                useEffect(() => {
-                                                    field.value = String(institution?.id)
-                                                }, [form, institution?.id])
-                                                return (
-                                                    <FormItem>
-                                                    <FormLabel>My School</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Popover open={open} onOpenChange={setOpen}>
-                                                            <PopoverTrigger asChild>
-                                                                <Button
-                                                                    variant="outline"
-                                                                    role="combobox"
-                                                                    aria-expanded={open}
-                                                                    className="w-full justify-between"
-                                                                >
-                                                                    {
-                                                                        institution?.name || "Loading..."
-                                                                    }
-                                                                </Button>
-                                                            </PopoverTrigger>
-                                                        </Popover>
-                                                    </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
-                                                </FormItem>
-                                                )
-                                            }}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="aimedInstitutionId"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>Recipient University</FormLabel>
-                                                    <FormControl className="h-12">
-                                                        <Popover open={open} onOpenChange={setOpen}>
-                                                            <PopoverTrigger asChild>
-                                                                <Button
-                                                                    variant="outline"
-                                                                    role="combobox"
-                                                                    aria-expanded={open}
-                                                                    className="w-full justify-between"
-                                                                >
-                                                                    {institutions.find((institution) => String(institution.id) === id)?.name}
-                                                                </Button>
-                                                            </PopoverTrigger>
-                                                        </Popover>
-                                                    </FormControl>
-                                                    <FormMessage className="pt-2 sm:text-sm" />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
+                                        {/* <FormField
                                             control={form.control}
                                             name="transcript"
                                             render={() => (
@@ -303,6 +218,20 @@ export function TranscriptSubmitForm({
                                                             </p>
                                                         )}
                                                     </FormMessage>
+                                                </FormItem>
+                                            )}
+                                        /> */}
+                                        <FormField
+                                            control={form.control}
+                                            name="transcript"
+                                            render={() => (
+                                                <FormItem className="mx-auto md:w-1/2">
+                                                    <FormLabel>
+                                                        Transcript                                                  
+                                                    </FormLabel>
+                                                    <FormControl>
+                                                        <Input type="file" onChange={e => { e.preventDefault(); setFile(e.target.files?.[0]); form.setValue('transcript', e.target.files?.[0]) }} />
+                                                    </FormControl>
                                                 </FormItem>
                                             )}
                                         />
