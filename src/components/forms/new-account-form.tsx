@@ -363,8 +363,10 @@ export function NewAccountForm(): JSX.Element {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="STUDENTS">{Role.STUDENT}</SelectItem>
-                                                    <SelectItem value={Role.INSTITUTION}>{Role.INSTITUTION}</SelectItem>
+                                                    <SelectItem value="STUDENTS">Student</SelectItem>
+                                                    <SelectItem value="INSTITUTION">Institution</SelectItem>
+                                                    <SelectItem value="HEALTH_CARE">Health Care</SelectItem>
+                                                    <SelectItem value="GOVERNMENT">Government</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
