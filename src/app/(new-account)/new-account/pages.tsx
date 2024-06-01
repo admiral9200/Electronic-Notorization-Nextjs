@@ -2,45 +2,49 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form"
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select"
 
 import { Input } from "@/components/ui/input"
+import { Institution, Role } from '@prisma/client'
+import { getInstitutions } from '@/actions/institutions'
 
 function NewAccount() {
 
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [institutions, setInstitutions] = useState<Institution[]>([])
 
-  // useEffect(() => {
-  //   async function fetchInstitutions() {
-  //     try {
-  //       // Assuming getInstitutions() is a function that fetches institutions
-  //       const institutionsData = await getInstitutions();
-  //       setInstitutions(institutionsData);
-  //     } catch (err) {
-  //       setError('Failed to fetch institutions');
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
 
-  //   fetchInstitutions();
-  // }, []);
+  useEffect(() => {
+    async function fetchInstitutions() {
+      try {
+        // Assuming getInstitutions() is a function that fetches institutions
+        const institutionsData = await getInstitutions()
+        setInstitutions(institutionsData);
+      } catch (err) {
+        setError('Failed to fetch institutions');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchInstitutions();
+  }, []);
 
   const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
@@ -67,7 +71,7 @@ function NewAccount() {
 
   return (
     <div className='py-10 sm:px-32'>
-        <h2 className='text-3xl font-bold'>Create New Account:</h2>
+      <h2 className='text-3xl font-bold'>Create New Account:</h2>
 
       <div>
         <div className='pb-12'>
