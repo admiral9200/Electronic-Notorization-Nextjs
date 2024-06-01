@@ -42,11 +42,7 @@ export function TranscriptSubmitForm({
 }: TranscriptSubmitFormProps): JSX.Element {
     const { toast } = useToast()
     const [isPending, startTransition] = React.useTransition()
-    const [preview, setPreview] = React.useState<string | ArrayBuffer | null>("");
-    const [open, setOpen] = React.useState(false)
     const [file, setFile] = useState<any>(null)
-
-    const [institution, setInstitution] = useState<Institution | null>(null)
 
     const router = useRouter()
     const session = useSession()
@@ -122,7 +118,6 @@ export function TranscriptSubmitForm({
      */
     const sendDataToSchool = async (formData: TranscriptFormInput) => {
         try {
-            console.log(formData)
             const formDataObject = new FormData()
             formDataObject.append('userId', formData.userId)
             formDataObject.append('aimedInstitutionId', formData.aimedInstitutionId)
@@ -167,67 +162,13 @@ export function TranscriptSubmitForm({
                                         className="flex flex-col gap-4"
                                         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
                                     >
-
-                                        {/* <FormField
-                                            control={form.control}
-                                            name="transcript"
-                                            render={() => (
-                                                <FormItem className="mx-auto md:w-1/2">
-                                                    <FormLabel
-                                                        className={`${fileRejections.length !== 0 && "text-destructive"
-                                                            }`}
-                                                    >
-                                                        <h2 className="text-xl font-semibold tracking-tight">
-                                                            Upload your transcript
-                                                            <span
-                                                                className={
-                                                                    form.formState.errors.transcript || fileRejections.length !== 0
-                                                                        ? "text-destructive"
-                                                                        : "text-muted-foreground"
-                                                                }
-                                                            ></span>
-                                                        </h2>
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <div
-                                                            {...getRootProps()}
-                                                            className="mx-auto flex cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground p-8 shadow-sm shadow-foreground"
-                                                        >
-                                                            {preview && (
-                                                                <img
-                                                                    src={preview as string}
-                                                                    alt="Uploaded transcript"
-                                                                    className="max-h-[400px] rounded-lg"
-                                                                />
-                                                            )}
-                                                            <ImagePlus
-                                                                className={`size-40 ${preview ? "hidden" : "block"}`}
-                                                            />
-                                                            <Input {...getInputProps()} type="file" />
-                                                            {isDragActive ? (
-                                                                <p>Drop your transcript!</p>
-                                                            ) : (
-                                                                <p>Click here or drag a transcript to upload it</p>
-                                                            )}
-                                                        </div>
-                                                    </FormControl>
-                                                    <FormMessage>
-                                                        {fileRejections.length !== 0 && (
-                                                            <p>
-                                                                File must be less than 1MB type must be pdf
-                                                            </p>
-                                                        )}
-                                                    </FormMessage>
-                                                </FormItem>
-                                            )}
-                                        /> */}
                                         <FormField
                                             control={form.control}
                                             name="transcript"
                                             render={() => (
                                                 <FormItem className="mx-auto md:w-1/2">
                                                     <FormLabel>
-                                                        Transcript                                                  
+                                                        Transcript
                                                     </FormLabel>
                                                     <FormControl>
                                                         <Input type="file" onChange={e => { e.preventDefault(); setFile(e.target.files?.[0]); form.setValue('transcript', e.target.files?.[0]) }} />

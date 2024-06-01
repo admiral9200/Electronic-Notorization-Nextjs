@@ -1,7 +1,6 @@
 import * as z from "zod"
 import { emailSchema } from "./email"
-import { InstitutionType, Role } from "@prisma/client"
-import { institutionSchema } from "@/app/(student)/student/order/data/schema"
+import { Role } from "@prisma/client"
 
 export const accountFormSchema = z.object({
     name: z
@@ -33,7 +32,9 @@ export const accountFormSchema = z.object({
     institutionId: z
       .string({ required_error: "Institution id must be selected." }),
     role: z
-      .nativeEnum(Role)
+      .nativeEnum(Role),
+    photo: z
+      .string({ required_error: "Photo required" })
   })
 
   export type AccountFormInput = z.infer<typeof accountFormSchema>

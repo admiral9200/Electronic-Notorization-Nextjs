@@ -16,22 +16,8 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-
 import { Input } from "@/components/ui/input"
-import { Icons } from "@/components/icons"
 import { AccountFormInput, accountFormSchema } from "@/validations/account"
-import { submitAccountForm } from "@/actions/account"
-import { useSession } from "next-auth/react"
-import { getUserByEmail } from "@/actions/user"
-import { Institution, Role } from "@prisma/client"
-import { getInstitutions } from "@/actions/institutions"
 
 export function InstitueAccountForm(): JSX.Element {
     const form = useForm<AccountFormInput>({
