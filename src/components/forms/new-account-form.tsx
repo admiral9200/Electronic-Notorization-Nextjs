@@ -16,6 +16,8 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import { StudentAccountForm } from "../account/student-account-form"
+import Link from "next/link"
+import { DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD } from "@/config/defaults"
 
 export function NewAccountForm() {
     return (
@@ -28,16 +30,15 @@ export function NewAccountForm() {
             <TabsContent value="student">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Student</CardTitle>
-                        <CardDescription>
-                            Make changes to your account here. Click save when you're done.
-                        </CardDescription>
+                        <Link href={DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD}>
+                            <Button >Next</Button>
+                        </Link>
                     </CardHeader>
                     <CardContent className="space-y-2">
                         <StudentAccountForm />
                     </CardContent>
                     <CardFooter>
-                        
+
                     </CardFooter>
                 </Card>
             </TabsContent>

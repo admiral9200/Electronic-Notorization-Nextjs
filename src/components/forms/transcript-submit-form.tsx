@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { getInstitutionByUserEmail } from "@/actions/institutions"
 import { submitTranscriptForm } from "@/actions/transcript"
+import { DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD } from "@/config/defaults"
 
 interface TranscriptSubmitFormProps {
     id: string,
@@ -54,7 +55,7 @@ export function TranscriptSubmitForm({
         resolver: zodResolver(transcriptFormSchema),
         mode: "onBlur",
         defaultValues: {
-            userId: '1',
+            userId: 'clwwkvvqf0003vou7nbo8mi56',
             aimedInstitutionId: id
         }
     });
@@ -72,6 +73,8 @@ export function TranscriptSubmitForm({
                     title: "Thank you!",
                     description: "Your message has been sent",
                 })
+
+                router.push(DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD)
                 // const message = await submitTranscriptForm(formData)
 
                 // switch (message) {
@@ -122,6 +125,7 @@ export function TranscriptSubmitForm({
             formDataObject.append('userId', formData.userId)
             formDataObject.append('aimedInstitutionId', formData.aimedInstitutionId)
             formDataObject.append('transcript', file)
+            formDataObject.append("createdAt", Date())
 
             const response = await fetch("/api/students/transfer-to-school", {
                 method: "POST",

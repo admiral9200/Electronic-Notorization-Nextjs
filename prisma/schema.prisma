@@ -120,11 +120,12 @@ model NewsletterSubscriber {
 }
 
 model Order {
-  id                     String      @id @default(cuid())
-  userId                 String      @map("user_id")
+  id                    String      @id @default(cuid())
+  userId                String      @map("user_id")
   recipientUniversityId String      @map("recipient_university_id")
-  file                   String
-  status                 OrderStatus @default(SUBMITTED)
+  file                  String
+  status                OrderStatus @default(SUBMITTED)
+  createdAt             DateTime    @default(now()) @map("created_at")
 
   @@map("orders")
 }

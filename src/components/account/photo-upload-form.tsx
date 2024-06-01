@@ -1,4 +1,6 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react"
+import Image from "next/image"
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 /**
  * This component is used to upload users' photo in account form....
@@ -9,12 +11,52 @@ export interface PhotoUploadFormRef {
 }
 
 interface PhotoUploadFormProps {
-
+    photo: string
 }
 
 const PhotoUploadForm = forwardRef<PhotoUploadFormRef, PhotoUploadFormProps>((props, ref) => {
     const [logoPreview, setLogoPreview] = React.useState<string | null>(null)
     const [file, setFile] = useState<File>(new File([], ""))
+    const [imagePath, setImagePath] = useState<string | null>(null)
+
+
+    const getProfilePhoto = async (fileName: string) => {
+        try {
+            const response = await fetch(`/api/profile-photos`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(fileName)
+            })
+            if (!response.ok) {
+                console.error("Error fetching profile photos")
+                return
+            }
+
+            const p = await response.json()
+
+            return p
+        } catch (error) {
+            console.error('Error retrieving profile photo: ', error)
+            throw error
+        }
+    }
+
+    useEffect(() => {
+        async function fetchProfilePhoto() {
+            if (props.photo) {
+                try {
+                    const path = await getProfilePhoto(props.photo)
+                    setImagePath(URL.createObjectURL(path))
+                } catch (error) {
+                    console.error('Error fetching profile photo: ', error)
+                }
+            }
+        }
+
+        fetchProfilePhoto()
+    }, [props.photo])
 
     /**
      * This function handles change of logo....
@@ -75,12 +117,12 @@ const PhotoUploadForm = forwardRef<PhotoUploadFormRef, PhotoUploadFormProps>((pr
                 body: formObject
             })
 
-            if(!response.ok) {
+            if (!response.ok) {
                 return null
             }
 
             return (await response.json()).data
-        } catch(error) {
+        } catch (error) {
             console.error(error)
             throw new Error("Failed upload account photo")
         }
@@ -96,10 +138,28 @@ const PhotoUploadForm = forwardRef<PhotoUploadFormRef, PhotoUploadFormProps>((pr
         }
     })
 
+
+    // if(!imagePath) {
+    //     return (
+    //         <div>Loading....</div>
+    //     )
+    // }
+
     return (
         <div className="bg-white rounded-md px-5 py-4 mt-6 flex justify-between items-center">
+            <div className="text-black">{imagePath}</div>
             <div className="flex space-x-4">
-                <img className="w-20 h-20 rounded-full border border-white" src={logoPreview ? logoPreview : "/images/avatars/pjborowiecki.jpeg"} alt="Preview" />
+                {/* <Image 
+                    src={logoPreview ? logoPreview : (imagePath ? imagePath : "/images/avatars/pjborowiecki.jpeg")}
+                    width={80}
+                    height={80}
+                    alt="Profile photo"
+                    className="w-20 h-20 rounded-full border border-white"
+                /> */}
+                <Avatar>
+                    <AvatarImage src={imagePath ? imagePath : "/images/avatars/pjborowiecki.jpeg"} alt="@shadcn" />
+                    <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
             </div>
             <button className="text-gray-600 font-bold border border-gray-500 rounded-sm py-2 text-sm px-4 mr-2" onClick={handleUploadButtonClick}>Upload</button>
             <input type="file" id="logoInput" className="hidden" onChange={handleLogoChange} />

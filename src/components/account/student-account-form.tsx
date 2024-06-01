@@ -78,7 +78,7 @@ export function StudentAccountForm(): JSX.Element {
                 address: String(user?.address) || "",
                 institutionId: String(user?.institutionId) || "0",
                 role: user?.role || Role.STUDENT,
-                photo: ''
+                photo: String(user?.image)
             })
         }
 
@@ -137,7 +137,10 @@ export function StudentAccountForm(): JSX.Element {
                 onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
             >
                 <div>
-                    <PhotoUploadForm ref={photoFormRef}/>
+                    <PhotoUploadForm 
+                        ref={photoFormRef}
+                        photo={userData.photo}
+                    />
                 </div>
                 <div className="grid w-full gap-8 md:grid-cols-2 md:gap-4">
                     <FormField

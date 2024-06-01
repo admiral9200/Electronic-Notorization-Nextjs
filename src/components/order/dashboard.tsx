@@ -75,6 +75,8 @@ import {
   TooltipProvider
 } from "@/components/ui/tooltip"
 import React, { useState } from "react"
+import { StudentRecentOrdersList } from "../students/recent-orders-list";
+import { useSession } from "next-auth/react";
 
 function CustomDialog({ isOpen, onClose }) {
   const [showPDF, setShowPDF] = useState(false);
@@ -111,6 +113,7 @@ function CustomDialog({ isOpen, onClose }) {
 }
 
 export function OrderingDashboard() {
+  const session = useSession()
   const credentialData = [
     {
       fileName: "Transcript.pdf",
@@ -125,7 +128,7 @@ export function OrderingDashboard() {
       name: "Jane Doe",
       email: "jane@doe.com",
       recipientUniversity: "Bing",
-      status:'Pending',
+      status: 'Pending',
       submittionDate: "7-5-2024"
     },
     {
@@ -133,7 +136,7 @@ export function OrderingDashboard() {
       name: "Michael Johnson",
       email: "michael@johnson.com",
       recipientUniversity: "Yahoo",
-      status:'Failed',
+      status: 'Failed',
       submittionDate: "1-9-2021"
     },
     {
@@ -141,7 +144,7 @@ export function OrderingDashboard() {
       name: "Emily Davis",
       email: "emily@davis.com",
       recipientUniversity: "Google",
-      status:'Approved',
+      status: 'Approved',
       submittionDate: "8-3-2020"
     }
   ];
@@ -154,7 +157,7 @@ export function OrderingDashboard() {
 
   return (
     <TooltipProvider>
-      <div className="flex min-h-screen w-full flex-col bg-muted/40 min-h-screen">
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
         <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
@@ -273,68 +276,7 @@ export function OrderingDashboard() {
                             <TableHead className="text-right">Amount</TableHead>
                           </TableRow>
                         </TableHeader>
-                        <TableBody>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">Harvard University</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              University
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Fulfilled
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2024-04-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">Harvard University</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              University
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Submitted
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2024-04-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                          <TableRow className="bg-accent">
-                            <TableCell>
-                              <div className="font-medium">Harvard University</div>
-                              <div className="hidden text-sm text-muted-foreground md:inline">
-                                liam@example.com
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              University
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge className="text-xs" variant="secondary">
-                                Processing
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              2024-04-23
-                            </TableCell>
-                            <TableCell className="text-right">$250.00</TableCell>
-                          </TableRow>
-                        </TableBody>
+                        <StudentRecentOrdersList session={session}/>
                       </Table>
                     </CardContent>
                   </Card>

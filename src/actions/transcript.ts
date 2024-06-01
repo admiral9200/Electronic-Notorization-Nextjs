@@ -11,7 +11,7 @@ export async function submitTranscriptForm(
         const validatedInput = await transcriptFormSchema.safeParse(rawInput)
         if (!validatedInput.success) return "error"
 
-       console.log("submitted data: ", validatedInput.data)
+        console.log("submitted data: ", validatedInput.data)
 
         return "success"
     } catch (error) {
@@ -25,9 +25,15 @@ export async function saveTranscriptOrderToDB(
 ): Promise<"error" | "success"> {
     try {
         const validatedInput = await transcriptOrderSchema.safeParse(data)
-        if(!validatedInput.success) return "error"
+        if (!validatedInput.success) return "error"
 
-        const { id, userId, recipientUniversityId, file, status } = validatedInput.data
+        const {
+            id,
+            userId,
+            recipientUniversityId,
+            file,
+            status
+        } = validatedInput.data
 
         const val = await prisma.order.create({
             data: {
@@ -39,12 +45,12 @@ export async function saveTranscriptOrderToDB(
             }
         })
 
-        if(!val) {
+        if (!val) {
             return "error"
         }
 
         return "success"
-    } catch(error) {
+    } catch (error) {
         console.error(error)
         throw new Error("Failed saving transcript order to db.")
     }

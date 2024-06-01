@@ -17,6 +17,7 @@ export async function POST(req: any, res: any) {
         const file = formData.getAll('transcript')[0]
         const userId = formData.getAll('userId')[0]
         const aimedInstitutionId = formData.getAll('aimedInstitutionId')[0]
+        const createdAt = formData.getAll('createdAt')[0]
 
         const newFileName = uuidv4()
         const filePath = `./public/uploads/${newFileName}` + '.pdf'
