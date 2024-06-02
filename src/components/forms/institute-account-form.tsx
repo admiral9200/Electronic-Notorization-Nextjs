@@ -17,11 +17,11 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { AccountFormInput, accountFormSchema } from "@/validations/account"
+import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
 
 export function InstitueAccountForm(): JSX.Element {
-    const form = useForm<AccountFormInput>({
-        resolver: zodResolver(accountFormSchema),
+    const form = useForm<StudentAccountFormInput>({
+        resolver: zodResolver(studentAccountFormSchema),
     })
 
     const [logoPreview, setLogoPreview] = React.useState<string | null>(null);

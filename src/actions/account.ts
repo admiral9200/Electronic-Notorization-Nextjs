@@ -1,13 +1,13 @@
 "use server"
 
 import { prisma } from "@/config/db";
-import { AccountFormInput, accountFormSchema } from "@/validations/account"
+import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
 
 export async function submitAccountForm(
-    rawInput: AccountFormInput
+    rawInput: StudentAccountFormInput
 ): Promise<"error" | "success"> {
     try {
-        const validatedInput = accountFormSchema.safeParse(rawInput)
+        const validatedInput = studentAccountFormSchema.safeParse(rawInput)
         if (!validatedInput.success) return "error"
 
         const { 

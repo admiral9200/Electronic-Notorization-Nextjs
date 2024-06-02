@@ -25,7 +25,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
-import { AccountFormInput, accountFormSchema } from "@/validations/account"
+import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
 import { submitAccountForm } from "@/actions/account"
 import { useSession } from "next-auth/react"
 import { getUserByEmail } from "@/actions/user"
@@ -38,7 +38,7 @@ export function AccountForm(): JSX.Element {
 
     const session = useSession();
 
-    const [userData, setUserData] = React.useState<AccountFormInput>({
+    const [userData, setUserData] = React.useState<StudentAccountFormInput>({
         name: "",
         surname: "",
         email: "",
@@ -50,8 +50,8 @@ export function AccountForm(): JSX.Element {
 
     const [institutions, setInstitutions] = React.useState<Institution[]>([]);
 
-    const form = useForm<AccountFormInput>({
-        resolver: zodResolver(accountFormSchema),
+    const form = useForm<StudentAccountFormInput>({
+        resolver: zodResolver(studentAccountFormSchema),
         defaultValues: userData
     })
 
@@ -98,7 +98,7 @@ export function AccountForm(): JSX.Element {
         fetchInstitutions();
     }, [])
 
-    function onSubmit(formData: AccountFormInput): void {
+    function onSubmit(formData: StudentAccountFormInput): void {
         startTransition(async () => {
             try {
                 const message = await submitAccountForm(formData)
