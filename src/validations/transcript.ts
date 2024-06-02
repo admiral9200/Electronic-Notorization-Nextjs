@@ -20,6 +20,9 @@ export const transcriptOrderSchema = z.object({
     userId: z
         .string()
         .min(1, "User Id is required"),
+    institutionId: z
+        .string()
+        .min(1, "Institution Id is required"),
     recipientUniversityId: z
         .string()
         .min(1, "Recipient University Id is required"),

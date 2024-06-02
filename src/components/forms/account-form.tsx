@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
-import { submitAccountForm } from "@/actions/account"
+import { submitStudentAccountForm } from "@/actions/account"
 import { useSession } from "next-auth/react"
 import { getUserByEmail } from "@/actions/user"
 import { Institution, Role } from "@prisma/client"
@@ -101,7 +101,7 @@ export function AccountForm(): JSX.Element {
     function onSubmit(formData: StudentAccountFormInput): void {
         startTransition(async () => {
             try {
-                const message = await submitAccountForm(formData)
+                const message = await submitStudentAccountForm(formData)
 
                 switch (message) {
                     case "success":

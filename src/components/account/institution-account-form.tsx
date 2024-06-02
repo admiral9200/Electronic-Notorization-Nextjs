@@ -25,11 +25,14 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
-import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
-import { submitAccountForm } from "@/actions/account"
+import { 
+    InstitutionAccountFormInput,
+    institutionAccountFormSchema 
+} from "@/validations/account"
+import { submitInstitutionAccountForm, submitStudentAccountForm } from "@/actions/account"
 import { useSession } from "next-auth/react"
 import { getUserByEmail } from "@/actions/user"
-import { Institution, Role } from "@prisma/client"
+import { Institution, InstitutionType, Role } from "@prisma/client"
 import { getInstitutions } from "@/actions/institutions"
 import PhotoUploadForm, { PhotoUploadFormRef } from "./photo-upload-form"
 
@@ -40,21 +43,19 @@ export function InstitutionAccountForm(): JSX.Element {
 
     const session = useSession()
 
-    const [userData, setUserData] = React.useState<StudentAccountFormInput>({
+    const [userData, setUserData] = React.useState<InstitutionAccountFormInput>({
         name: "",
-        surname: "",
         email: "",
+        location: "",
         phone: "",
-        address: "",
-        institutionId: "0",
-        role: Role.STUDENT,
-        photo: ''
+        genre: InstitutionType.SCHOOL,
+        logo: ''
     })
 
     const [institutions, setInstitutions] = React.useState<Institution[]>([])
 
-    const form = useForm<StudentAccountFormInput>({
-        resolver: zodResolver(studentAccountFormSchema),
+    const form = useForm<InstitutionAccountFormInput>({
+        resolver: zodResolver(institutionAccountFormSchema),
         defaultValues: userData
     })
 
@@ -72,13 +73,11 @@ export function InstitutionAccountForm(): JSX.Element {
             const user = await getUserByEmail({ email: String(session.data?.user.email) })
             setUserData({
                 name: String(user?.name) || "",
-                surname: String(user?.surname) || "",
                 email: String(user?.email) || "",
                 phone: String(user?.phone) || "",
-                address: String(user?.address) || "",
-                institutionId: String(user?.institutionId) || "0",
-                role: user?.role || Role.STUDENT,
-                photo: String(user?.image)
+                location: String(user?.address) || "",
+                genre: InstitutionType.SCHOOL,
+                logo: String(user?.image)
             })
         }
 
@@ -99,12 +98,12 @@ export function InstitutionAccountForm(): JSX.Element {
         fetchInstitutions()
     }, [])
 
-    function onSubmit(formData: StudentAccountFormInput): void {
+    function onSubmit(formData: InstitutionAccountFormInput): void {
         startTransition(async () => {
             try {
                 const photo = await photoFormRef.current?.handlePhotoUpload()
 
-                const message = await submitAccountForm({ ...formData, photo: photo as string })
+                const message = await submitInstitutionAccountForm({ ...formData, logo: photo as string })
 
                 switch (message) {
                     case "success":
@@ -139,7 +138,7 @@ export function InstitutionAccountForm(): JSX.Element {
                 <div>
                     <PhotoUploadForm
                         ref={photoFormRef}
-                        photo={userData.photo}
+                        photo={userData.logo}
                     />
                 </div>
                 <div className="grid w-full gap-8 md:grid-cols-2 md:gap-4">
@@ -173,7 +172,7 @@ export function InstitutionAccountForm(): JSX.Element {
                 </div>
 
                 <div className="grid w-full gap-8 md:grid-cols-2 md:gap-4">
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="surname"
                         render={({ field }) => (
@@ -185,7 +184,7 @@ export function InstitutionAccountForm(): JSX.Element {
                                 <FormMessage className="pt-2 sm:text-sm" />
                             </FormItem>
                         )}
-                    />
+                    /> */}
 
                     <FormField
                         control={form.control}
@@ -205,11 +204,10 @@ export function InstitutionAccountForm(): JSX.Element {
                 <div className="grid w-full gap-8 md:grid-cols-2 md:gap-4">
                     <FormField
                         control={form.control}
-                        name="address"
+                        name="location"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Address</FormLabel>
-
+                                <FormLabel>Location</FormLabel>
                                 <FormControl className="h-10">
                                     <Input className="border-gray-400 border placeholder:text-gray-300" type="text" placeholder="2618 Ocala Street Orlando Florida 32809 United States" {...field} />
                                 </FormControl>
@@ -220,21 +218,21 @@ export function InstitutionAccountForm(): JSX.Element {
 
                     <FormField
                         control={form.control}
-                        name="institutionId"
+                        name="genre"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Institution</FormLabel>
+                                <FormLabel>Genre</FormLabel>
                                 <FormControl className="h-12">
                                     <Select value={String(field.value)} onValueChange={field.onChange}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select a university" />
+                                                <SelectValue placeholder="Select a genre" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {institutions.filter((ins: Institution) => ins.genre === "SCHOOL").map((institution: Institution) => (
-                                                <SelectItem key={institution.id} value={String(institution.id)}>
-                                                    {institution.name}
+                                            {Object.entries(InstitutionType).map(([key, value]) => (
+                                                <SelectItem key={value.toString()} value={key.toString()}>
+                                                    { key.toString() }
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

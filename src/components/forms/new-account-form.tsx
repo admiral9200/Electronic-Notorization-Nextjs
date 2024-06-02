@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tabs"
 import { StudentAccountForm } from "../account/student-account-form"
 import Link from "next/link"
-import { DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD } from "@/config/defaults"
+import { DEFAULT_REDIRECT_TO_INSTITUTION_DASHBOARD, DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD } from "@/config/defaults"
 import { InstitutionAccountForm } from "../account/institution-account-form"
 
 export function NewAccountForm() {
@@ -27,7 +27,7 @@ export function NewAccountForm() {
                 <Card>
                     <CardHeader>
                         <Link href={DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD}>
-                            <Button >Next</Button>
+                            <Button >Next Student Dashboard</Button>
                         </Link>
                     </CardHeader>
                     <CardContent className="space-y-2">
@@ -38,8 +38,8 @@ export function NewAccountForm() {
             <TabsContent value="institution">
                 <Card>
                     <CardHeader>
-                        <Link href={DEFAULT_REDIRECT_TO_STUDENT_DASHBOARD}>
-                            <Button >Next</Button>
+                        <Link href={DEFAULT_REDIRECT_TO_INSTITUTION_DASHBOARD}>
+                            <Button >Next Institution Dashboard</Button>
                         </Link>
                     </CardHeader>
                     <CardContent className="space-y-2">

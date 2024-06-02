@@ -147,7 +147,6 @@ const PhotoUploadForm = forwardRef<PhotoUploadFormRef, PhotoUploadFormProps>((pr
 
     return (
         <div className="bg-white rounded-md px-5 py-4 mt-6 flex justify-between items-center">
-            <div className="text-black">{imagePath}</div>
             <div className="flex space-x-4">
                 {/* <Image 
                     src={logoPreview ? logoPreview : (imagePath ? imagePath : "/images/avatars/pjborowiecki.jpeg")}
@@ -156,8 +155,13 @@ const PhotoUploadForm = forwardRef<PhotoUploadFormRef, PhotoUploadFormProps>((pr
                     alt="Profile photo"
                     className="w-20 h-20 rounded-full border border-white"
                 /> */}
-                <Avatar>
-                    <AvatarImage src={imagePath ? imagePath : "/images/avatars/pjborowiecki.jpeg"} alt="@shadcn" />
+                <Avatar
+                    className="w-24 h-24"
+                >
+                    <AvatarImage 
+                        src={logoPreview ? logoPreview : (imagePath ? imagePath : "/images/avatars/pjborowiecki.jpeg")} 
+                        alt="@shadcn"
+                    />
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
             </div>

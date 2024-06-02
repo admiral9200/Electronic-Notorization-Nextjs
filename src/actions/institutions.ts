@@ -33,3 +33,22 @@ export async function getInstitutionByUserEmail(email: string | undefined): Prom
         throw Error("Fetching institutions error by user email.")
     }
 }
+
+export async function getInstitutionIdByUserId(userId: string | undefined): Promise<string> {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
+
+        if(!user) {
+            return "error"
+        }
+
+        return String(user.institutionId)
+    } catch (error) {
+        console.error(error)
+        throw Error("Fetching institution id error by user id")
+    }
+}

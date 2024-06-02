@@ -1,7 +1,12 @@
 "use server"
 
 import { prisma } from "@/config/db";
-import { TranscriptFormInput, TranscriptOrderInput, transcriptFormSchema, transcriptOrderSchema } from "@/validations/transcript";
+import { 
+    TranscriptFormInput, 
+    TranscriptOrderInput, 
+    transcriptFormSchema, 
+    transcriptOrderSchema 
+} from "@/validations/transcript";
 
 
 export async function submitTranscriptForm(
@@ -10,8 +15,6 @@ export async function submitTranscriptForm(
     try {
         const validatedInput = await transcriptFormSchema.safeParse(rawInput)
         if (!validatedInput.success) return "error"
-
-        console.log("submitted data: ", validatedInput.data)
 
         return "success"
     } catch (error) {
@@ -30,6 +33,7 @@ export async function saveTranscriptOrderToDB(
         const {
             id,
             userId,
+            institutionId,
             recipientUniversityId,
             file,
             status
@@ -39,6 +43,7 @@ export async function saveTranscriptOrderToDB(
             data: {
                 id,
                 userId,
+                institutionId,
                 recipientUniversityId,
                 file,
                 status

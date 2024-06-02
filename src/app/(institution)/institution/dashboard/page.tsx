@@ -18,9 +18,14 @@ import TranscriptStatus from './components/transcript-status'
 import OtherInstitutions from './components/other-institutions'
 import NotificationsFromStudents from './components/notifications-from-students'
 
-export default function Dashboard() {
+
+/**
+ * This page is being used to display several information including number of students, list of orders...
+ * @returns JSX
+ */
+export default function Dashboard(): JSX.Element {
   return (
-    <WebSocketProvider 
+    <WebSocketProvider
       url="ws://localhost:3000/api/socket"
     >
       <Layout>
@@ -160,19 +165,21 @@ export default function Dashboard() {
               </div>
               <div className='py-6 pt-12'>
                 <h2 className='text-2xl text-white pb-4 font-bold'>Credentials Status:</h2>
-                <TranscriptStatus />
-              </div> 
+                <TranscriptStatus 
+                  institutionId='16'
+                />
+              </div>
               <div className='py-6'>
                 <h2 className='text-2xl text-white pb-4 font-bold'>Other Institutions:</h2>
                 <OtherInstitutions />
-              </div> 
+              </div>
               <div className='py-6 pb-16'>
                 <h2 className='text-2xl text-white pb-4 font-bold'>Notifications From Students:</h2>
                 <NotificationsFromStudents />
-              </div> 
+              </div>
             </TabsContent>
             <TabsContent value='students' className='space-y-4'>
-               <StudentsList />
+              <StudentsList />
             </TabsContent>
           </Tabs>
         </LayoutBody>

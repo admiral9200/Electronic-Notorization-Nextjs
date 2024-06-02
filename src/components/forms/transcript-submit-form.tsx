@@ -55,7 +55,7 @@ export function TranscriptSubmitForm({
         resolver: zodResolver(transcriptFormSchema),
         mode: "onBlur",
         defaultValues: {
-            userId: 'clwwkvvqf0003vou7nbo8mi56',
+            userId: 'clwxygwsc0000w4abuoj50s4c',
             aimedInstitutionId: id
         }
     });

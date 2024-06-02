@@ -122,6 +122,7 @@ model NewsletterSubscriber {
 model Order {
   id                    String      @id @default(cuid())
   userId                String      @map("user_id")
+  institutionId         String      @map("institution_id")
   recipientUniversityId String      @map("recipient_university_id")
   file                  String
   status                OrderStatus @default(SUBMITTED)

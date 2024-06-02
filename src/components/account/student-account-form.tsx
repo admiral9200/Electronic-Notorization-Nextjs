@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/components/icons"
 import { StudentAccountFormInput, studentAccountFormSchema } from "@/validations/account"
-import { submitAccountForm } from "@/actions/account"
+import { submitStudentAccountForm } from "@/actions/account"
 import { useSession } from "next-auth/react"
 import { getUserByEmail } from "@/actions/user"
 import { Institution, Role } from "@prisma/client"
@@ -104,7 +104,7 @@ export function StudentAccountForm(): JSX.Element {
             try {
                 const photo = await photoFormRef.current?.handlePhotoUpload()
 
-                const message = await submitAccountForm({ ...formData, photo: photo as string })
+                const message = await submitStudentAccountForm({ ...formData, photo: photo as string })
 
                 switch (message) {
                     case "success":
