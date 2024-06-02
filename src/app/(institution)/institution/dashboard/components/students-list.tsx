@@ -114,6 +114,7 @@ export default function StudentsList() {
                     }
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                     aria-label="Select all"
+                    className="sm:mr-0 mr-2"
                 />
             ),
             cell: ({ row }) => (
@@ -241,12 +242,14 @@ export default function StudentsList() {
                                         className="border border-gray-400 text-white"
                                         key={header.id}
                                     >
+                                        <h4 className="w-max">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
                                                 header.column.columnDef.header,
                                                 header.getContext()
                                             )}
+                                        </h4>
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -262,10 +265,12 @@ export default function StudentsList() {
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="py-3" key={cell.id}>
+                                            <h4 className="w-max">
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
                                             )}
+                                            </h4>
                                         </TableCell>
                                     ))}
                                 </TableRow>
